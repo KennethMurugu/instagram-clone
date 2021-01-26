@@ -1,0 +1,148 @@
+// Formulate inputs
+// -----------------------------------------------------------------------------
+
+.formulate-input {
+  // global wrapper styles
+  font-family: $main-font;
+  color: #000;
+  margin-bottom: 0;
+
+  .formulate-input-label {
+    // global label styles
+    font-size: 1rem;
+  }
+
+  .formulate-input-element {
+    // Global field-level wrapper styles
+    max-width: 100%;
+  }
+
+  .formulate-input-help {
+    // Global help text styles
+    color: #ababab;
+    letter-spacing: 0.5px;
+  }
+
+  .formulate-input-errors {
+    // Global error message list wrapper
+  }
+
+  .formulate-input-error,
+  .formulate-file-upload-error {
+    // Error message styles
+  }
+
+  .formulate-input-group-item {
+    // Group of items (like list of checkboxes) wrapper
+  }
+
+  &:last-child {
+    margin-bottom: auto;
+  }
+
+  // Text inputs
+  // -----------------------------------------------------------------------------
+
+  &[data-classification='text'] {
+    input {
+      // Style all text-like input elements
+    }
+  }
+
+  // Slider inputs
+  // -----------------------------------------------------------------------------
+
+  &[data-classification='slider'] {
+    input {
+      // Style range inputs
+    }
+  }
+
+  // Textarea inputs
+  // -----------------------------------------------------------------------------
+
+  &[data-classification='textarea'] {
+    textarea {
+      // Style textareas
+    }
+  }
+
+  // Button inputs
+  // -----------------------------------------------------------------------------
+
+  &[data-classification='button'] {
+    button {
+      // Style button inputs
+      @include default-btn-style();
+      width: 100%;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+
+      &:active,
+      &:focus {
+        border: none;
+      }
+    }
+  }
+
+  // Select lists
+  // -----------------------------------------------------------------------------
+
+  &[data-classification='select'] {
+    select {
+      // Style select lists
+      max-width: 100%;
+      padding: 0.5rem 0.75rem;
+      border-radius: 3px;
+      background-color: rgb(224, 224, 224);
+      color: #000;
+      cursor: pointer;
+
+      &[data-placeholder-selected] {
+        color: initial;
+      }
+    }
+  }
+
+  // Box inputs
+  // -----------------------------------------------------------------------------
+
+  &[data-classification='box'] {
+    .formulate-input-element {
+      // Box input (checkbox and radio) wrapper (might want flex here)
+      input {
+        // Style box element itself
+      }
+    }
+  }
+
+  // File inputs
+  // -----------------------------------------------------------------------------
+
+  &[data-classification='file'] {
+    .formulate-input-upload-area {
+      input {
+        // The actual upload element
+      }
+    }
+  }
+
+  // Image uploads
+  // -----------------------------------------------------------------------------
+
+  [data-type='image'] {
+    // image uploads
+  }
+}
+
+// Form-level errors
+// -----------------------------------------------------------------------------
+
+.formulate-form-errors {
+  .formulate-form-error {
+    // form errors (not specific to a field)
+  }
+}

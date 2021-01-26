@@ -1,0 +1,119 @@
+$spacing-sizes: (
+  0: 0rem,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 0.75rem,
+  4: 1rem,
+  5: 1.25rem,
+  6: 1.5rem,
+  7: 1.75rem,
+  8: 2rem,
+  9: 2.25rem,
+  10: 2.5rem,
+  11: 2.75rem,
+  12: 3rem,
+  'auto': auto,
+);
+// Margins
+@mixin ml-($size: 0) {
+  // $m: map-get($spacing-sizes, $size);
+  // @debug 'margin-left=#{$m}, size=#{$size}';
+  margin-left: map-get($spacing-sizes, $size) !important;
+}
+@mixin mr-($size: 0) {
+  margin-right: map-get($spacing-sizes, $size) !important;
+}
+@mixin mt-($size: 0) {
+  margin-top: map-get($spacing-sizes, $size) !important;
+}
+@mixin mb-($size: 0) {
+  margin-bottom: map-get($spacing-sizes, $size) !important;
+}
+
+@mixin mx-($size: 0) {
+  @include ml-($size);
+  @include mr-($size);
+}
+
+@mixin my-($size: 0) {
+  @include mt-($size);
+  @include mb-($size);
+}
+
+// Paddings
+@mixin pl-($size: 0) {
+  padding-left: map-get($spacing-sizes, $size) !important;
+}
+@mixin pr-($size: 0) {
+  padding-right: map-get($spacing-sizes, $size) !important;
+}
+@mixin pt-($size: 0) {
+  padding-top: map-get($spacing-sizes, $size) !important;
+}
+@mixin pb-($size: 0) {
+  padding-bottom: map-get($spacing-sizes, $size) !important;
+}
+
+@mixin px-($size: 0) {
+  @include pl-($size);
+  @include pr-($size);
+}
+
+@mixin py-($size: 0) {
+  @include pt-($size);
+  @include pb-($size);
+}
+
+// Generate classes for each of the
+@each $key, $size in $spacing-sizes {
+  // @debug $key, $size;
+  // Margins
+  .ma-#{$key} {
+    @include mx-($key);
+    @include my-($key);
+  }
+  .mx-#{$key} {
+    @include mx-($key);
+  }
+  .my-#{$key} {
+    @include my-($key);
+  }
+  .ml-#{$key} {
+    @include ml-($key);
+  }
+  .mr-#{$key} {
+    @include mr-($key);
+  }
+  .mt-#{$key} {
+    @include mt-($key);
+  }
+  .mb-#{$key} {
+    @include mb-($key);
+  }
+  // Padding
+  //Padding does not have the `auto` property so skip it
+  @if $key != auto {
+    .pa-#{$key} {
+      @include px-($key);
+      @include py-($key);
+    }
+    .px-#{$key} {
+      @include px-($key);
+    }
+    .py-#{$key} {
+      @include py-($key);
+    }
+    .pl-#{$key} {
+      @include pl-($key);
+    }
+    .pr-#{$key} {
+      @include pr-($key);
+    }
+    .pt-#{$key} {
+      @include pt-($key);
+    }
+    .pb-#{$key} {
+      @include pb-($key);
+    }
+  }
+}

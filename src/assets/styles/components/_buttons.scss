@@ -1,0 +1,24 @@
+.btn {
+  // background-color: $btn-bg;
+  // color: #fff;
+  // border: none;
+  // border-radius: 3px;
+  // padding: 0.25rem 0.5rem;
+  // cursor: pointer;
+  // &:active {
+  //   outline: none;
+  // }
+
+  @include default-btn-style();
+
+  &.btn-login-facebook {
+    font-weight: bold;
+    display: flex;
+    place-items: center;
+    justify-content: center;
+    .fb-icon {
+      font-size: 1.15rem;
+      margin-right: 0.5rem;
+    }
+  }
+}

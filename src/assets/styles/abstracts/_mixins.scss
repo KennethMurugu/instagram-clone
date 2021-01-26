@@ -1,0 +1,15 @@
+@mixin default-btn-style() {
+  $btn-bg: #0395f6;
+  font-family: $main-font;
+  background-color: $btn-bg;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  &:active {
+    outline: none;
+    background-color: mix(#fff, $btn-bg, 30%);
+  }
+  @content;
+}

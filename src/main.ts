@@ -5,6 +5,15 @@ import store from './store'
 
 Vue.config.productionTip = false
 
+// Vendor scripts
+import '@/vendor/fontawesome'
+//@ts-ignore
+import VueFormulate from '@braid/vue-formulate'
+Vue.use(VueFormulate)
+
+// Import application css
+import '@/assets/styles/application.scss'
+
 new Vue({
   router,
   store,
