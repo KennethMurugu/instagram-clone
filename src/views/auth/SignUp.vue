@@ -1,5 +1,5 @@
 <template>
-  <div class="sign-up">
+  <div class="sign-up my-6">
     <div class="content-container panel mx-auto my-6 px-12">
       <div class="header mb-6">
         <h1 class="my-6">Instagram</h1>
@@ -21,6 +21,7 @@
         <FormulateForm
           v-model="signUpForm"
           :schema="signUpFormSchema"
+          @submit="emailSignUp"
         ></FormulateForm>
       </div>
     </div>
@@ -33,15 +34,19 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import firebase from '@/vendor/firebase'
+import { userAccountsPath } from '@/vendor/firebase/dbrefs'
+
+// import { ui } from '@/vendor/firebase'
 
 @Component
 export default class SignUp extends Vue {
   signUpFormSchema = [
     {
       class: 'mb-2',
-      name: 'name',
-      placeholder: 'Mobile number or email',
-      validationName: 'Mobile number or email',
+      name: 'email',
+      placeholder: 'Email',
+      validationName: 'Email',
       validation: 'required',
     },
     {
@@ -57,19 +62,18 @@ export default class SignUp extends Vue {
       name: 'user_name',
       placeholder: 'Username',
       validationName: 'Username',
-      validation: 'required',
+      validation: 'required|alphanumeric',
     },
     {
-      class: 'mb-2',
+      class: 'mb-4',
       name: 'password',
       type: 'password',
       placeholder: 'Password',
       validationName: 'Password',
-      validation: 'required',
+      validation: 'required|min:6,length',
     },
     {
       class: 'mb-4',
-      name: 'password_confirm',
       type: 'password',
       placeholder: 'Confirm password',
       validationName: 'Password confirmation',
@@ -78,9 +82,72 @@ export default class SignUp extends Vue {
     {
       type: 'submit',
       label: 'Sign up',
+      class: 'mb-2',
+    },
+    {
+      component: 'small',
+      class: 'mb-6',
+      children:
+        'By signing up, you agree to our Terms, Data Policy and Cookies Policy ',
     },
   ]
   signUpForm = {}
+
+  // firebaseEmailPasswordSignup() {
+  //   ui.start('#firebaseui-auth-container', {
+  //     signInOptions: [
+  //       {
+  //         provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+  //         requireDisplayName: false,
+  //       },
+  //     ],
+  //   })
+  // }
+
+  emailSignUp(form: {
+    email: string
+    full_name: string
+    user_name: string
+    password: string
+  }) {
+    // TODO Check if number_or_email is a phone number or email
+    const isEmailRegex = /\w+@\w+\.[a-z]+/
+    // const isAnEmailAddress = isEmailRegex.test(form.number_or_email)
+
+    // TODO If not an email, check is number is valid
+
+    console.log(form)
+
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(form.email, form.password)
+      .then((userCredential) => {
+        // const uid: string = userCredential.user?.email
+        const userSignupDetails = {
+          uid: userCredential.user?.uid,
+          email: form.email,
+          phone: '',
+          full_name: form.full_name,
+          user_name: form.user_name,
+          password: form.password,
+        }
+
+        return firebase
+          .database()
+          .ref(userAccountsPath(form.user_name))
+          .set(userSignupDetails)
+      })
+      .then((database) => {
+        alert(`Signed up as ${form.email}`)
+      })
+      .catch((error) => {
+        var errorCode = error.code
+        var errorMessage = error.message
+        console.error(error)
+        alert('Something went wrong: ' + errorMessage)
+        // ..
+      })
+  }
 }
 </script>
 

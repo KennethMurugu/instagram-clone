@@ -11,8 +11,21 @@ let firebaseConfig = {
     messagingSenderId: "367689805296",
     appId: "1:367689805296:web:3560c793a1aca6f566c135"
   };
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+export default firebase
 
 // Add the Firebase services that you want to use
-import "firebase/database";
+import 'firebase/database'
+
+
+// Initialize the FirebaseUI Widget using Firebase.
+import * as firebaseui from 'firebaseui'
+import 'firebaseui/dist/firebaseui.css' 
+
+export let ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+
+
+

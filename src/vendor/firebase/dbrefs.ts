@@ -1,0 +1,1 @@
+export function userAccountsPath(userId:string) { return `/accounts/${userId}` }
