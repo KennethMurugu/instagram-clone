@@ -39,7 +39,7 @@ import { userAccountsPath } from '@/vendor/firebase/dbrefs'
 
 // import { ui } from '@/vendor/firebase'
 
-@Component
+@Component({})
 export default class SignUp extends Vue {
   signUpFormSchema = [
     {
@@ -93,29 +93,12 @@ export default class SignUp extends Vue {
   ]
   signUpForm = {}
 
-  // firebaseEmailPasswordSignup() {
-  //   ui.start('#firebaseui-auth-container', {
-  //     signInOptions: [
-  //       {
-  //         provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-  //         requireDisplayName: false,
-  //       },
-  //     ],
-  //   })
-  // }
-
   emailSignUp(form: {
     email: string
     full_name: string
     user_name: string
     password: string
   }) {
-    // TODO Check if number_or_email is a phone number or email
-    const isEmailRegex = /\w+@\w+\.[a-z]+/
-    // const isAnEmailAddress = isEmailRegex.test(form.number_or_email)
-
-    // TODO If not an email, check is number is valid
-
     console.log(form)
 
     firebase

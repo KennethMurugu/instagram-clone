@@ -18,6 +18,7 @@ export default firebase
 
 // Add the Firebase services that you want to use
 import 'firebase/database'
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
 
 
 // Initialize the FirebaseUI Widget using Firebase.

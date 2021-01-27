@@ -9,16 +9,13 @@
         <FormulateForm
           v-model="signUpForm"
           :schema="signUpFormSchema"
-          @submit="emailSignUp"
+          @submit="firebaseEmailPasswordLogin"
         ></FormulateForm>
       </div>
 
       <div class="auth-options">
         <div class="or mb-12">OR</div>
-        <button
-          class="btn btn-login-facebook mx-auto mb-6"
-          @click="firebaseEmailPasswordSignup"
-        >
+        <button class="btn btn-login-facebook mx-auto mb-6">
           <fa-icon :icon="['fab', 'facebook-square']" class="fb-icon"></fa-icon>
           Login with Facebook
         </button>
@@ -38,18 +35,16 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
-import { userAccountsPath } from '@/vendor/firebase/dbrefs'
-
-import { ui } from '@/vendor/firebase'
 
 @Component
 export default class SignUp extends Vue {
   signUpFormSchema = [
     {
       class: 'mb-2',
-      name: 'username_number_or_email',
-      placeholder: 'Phone number, username or email',
-      validationName: 'Phone number, username or email',
+      name: 'email',
+      type: 'email',
+      placeholder: 'Email',
+      validationName: 'Email',
       validation: 'required',
     },
 
@@ -69,48 +64,21 @@ export default class SignUp extends Vue {
   ]
   signUpForm = {}
 
-  firebaseEmailPasswordSignup() {
-    ui.start('#firebaseui-auth-container', {
-      signInOptions: [
-        {
-          provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-          requireDisplayName: false,
-        },
-      ],
-    })
-  }
-
-  emailSignUp(form: {
-    number_or_email: string
-    full_name: string
-    user_name: string
-    password: string
-  }) {
-    // TODO Check if number_or_email is a phone number or email
-    const isEmailRegex = /\w+@\w+\.[a-z]+/
-    const isAnEmailAddress = isEmailRegex.test(form.number_or_email)
-
-    // TODO If not an email, check is number is valid
-
-    const userSignupDetails = {
-      email: isAnEmailAddress ? form.number_or_email : '',
-      phone: !isAnEmailAddress ? form.number_or_email : '',
-      full_name: form.full_name,
-      user_name: form.user_name,
-      password: form.password,
-    }
-
-    console.log(userSignupDetails)
+  firebaseEmailPasswordLogin(form: { email: string; password: string }) {
+    console.log(form)
 
     firebase
-      .database()
-      .ref(userAccountsPath(form.user_name))
-      .update(userSignupDetails, (error) => {
-        if (error) {
-          alert(error)
-        } else {
-          alert(`Sign up successful as ${userSignupDetails.user_name}`)
-        }
+      .auth()
+      .signInWithEmailAndPassword(form.email, form.password)
+      .then((userCredentials) => {
+        const email = userCredentials.user?.email
+        alert(`Login successful as ${email}`)
+      })
+      .catch((error) => {
+        var errorCode = error.code
+        var errorMessage = error.message
+        console.error(error)
+        alert('Something went wrong: ' + errorMessage)
       })
   }
 }
