@@ -22,7 +22,24 @@
           v-model="signUpForm"
           :schema="signUpFormSchema"
           @submit="emailSignUp"
-        ></FormulateForm>
+        >
+          <FormulateInput type="submit" class="mb-2" :disabled="isWorking">
+            <fa-icon
+              icon="spinner"
+              spin="true"
+              class="fa-lg"
+              v-if="isWorking"
+            ></fa-icon>
+            <span v-else>Log in</span>
+          </FormulateInput>
+
+          <p class="mb-6">
+            <small
+              >By signing up, you agree to our Terms, Data Policy and Cookies
+              Policy
+            </small>
+          </p>
+        </FormulateForm>
       </div>
     </div>
 
@@ -45,6 +62,7 @@ export default class SignUp extends Vue {
     {
       class: 'mb-2',
       name: 'email',
+      label: 'Email:',
       placeholder: 'Email',
       validationName: 'Email',
       validation: 'required',
@@ -52,7 +70,7 @@ export default class SignUp extends Vue {
     {
       class: 'mb-2',
       name: 'full_name',
-
+      label: 'Full Name:',
       placeholder: 'Full Name',
       validationName: 'Full Name',
       validation: 'required',
@@ -60,6 +78,7 @@ export default class SignUp extends Vue {
     {
       class: 'mb-2',
       name: 'user_name',
+      label: 'Username:',
       placeholder: 'Username',
       validationName: 'Username',
       validation: 'required|alphanumeric',
@@ -68,6 +87,7 @@ export default class SignUp extends Vue {
       class: 'mb-4',
       name: 'password',
       type: 'password',
+      label: 'Password:',
       placeholder: 'Password',
       validationName: 'Password',
       validation: 'required|min:6,length',
@@ -75,23 +95,39 @@ export default class SignUp extends Vue {
     {
       class: 'mb-4',
       type: 'password',
+      label: 'Confirm password:',
       placeholder: 'Confirm password',
       validationName: 'Password confirmation',
       validation: '^required|confirm:password',
     },
-    {
-      type: 'submit',
-      label: 'Sign up',
-      class: 'mb-2',
-    },
-    {
-      component: 'small',
-      class: 'mb-6',
-      children:
-        'By signing up, you agree to our Terms, Data Policy and Cookies Policy ',
-    },
   ]
   signUpForm = {}
+  isWorking = false
+
+  checkIfUserNameExists(user_name: string) {
+    return firebase
+      .database()
+      .ref('/accounts/' + user_name)
+      .once('value')
+  }
+
+  createUserCredentials(email: string, password: string) {
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
+  }
+
+  createUserAccountInDatabase(userSignupDetails: {
+    uid: string
+    email: string
+    phone: string
+    full_name: string
+    user_name: string
+    password: string
+  }) {
+    return firebase
+      .database()
+      .ref(userAccountsPath(userSignupDetails.user_name))
+      .set(userSignupDetails)
+  }
 
   emailSignUp(form: {
     email: string
@@ -101,13 +137,22 @@ export default class SignUp extends Vue {
   }) {
     console.log(form)
 
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(form.email, form.password)
+    this.isWorking = true
+    // Check if username is unique
+    this.checkIfUserNameExists(form.user_name)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          // this user exists;
+          throw new Error(`The username ${form.user_name} is already taken.`)
+        } else {
+          // Sign up user with credentials
+          return this.createUserCredentials(form.email, form.password)
+        }
+      })
       .then((userCredential) => {
-        // const uid: string = userCredential.user?.email
+        // Create user account in DB
         const userSignupDetails = {
-          uid: userCredential.user?.uid,
+          uid: userCredential.user?.uid!,
           email: form.email,
           phone: '',
           full_name: form.full_name,
@@ -115,20 +160,17 @@ export default class SignUp extends Vue {
           password: form.password,
         }
 
-        return firebase
-          .database()
-          .ref(userAccountsPath(form.user_name))
-          .set(userSignupDetails)
+        return this.createUserAccountInDatabase(userSignupDetails)
       })
       .then((database) => {
         alert(`Signed up as ${form.email}`)
       })
       .catch((error) => {
-        var errorCode = error.code
-        var errorMessage = error.message
         console.error(error)
-        alert('Something went wrong: ' + errorMessage)
-        // ..
+        alert('Something went wrong: ' + error.message)
+      })
+      .finally(() => {
+        this.isWorking = false
       })
   }
 }

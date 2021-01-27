@@ -7,10 +7,20 @@
 
       <div class="sign-up-form mb-12">
         <FormulateForm
-          v-model="signUpForm"
-          :schema="signUpFormSchema"
+          v-model="loginForm"
+          :schema="loginFormSchema"
           @submit="firebaseEmailPasswordLogin"
-        ></FormulateForm>
+        >
+          <FormulateInput type="submit" class="mb-2" :disabled="isWorking">
+            <fa-icon
+              icon="spinner"
+              spin="true"
+              class="fa-lg"
+              v-if="isWorking"
+            ></fa-icon>
+            <span v-else>Log in</span>
+          </FormulateInput>
+        </FormulateForm>
       </div>
 
       <div class="auth-options">
@@ -37,12 +47,13 @@ import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 
 @Component
-export default class SignUp extends Vue {
-  signUpFormSchema = [
+export default class Login extends Vue {
+  loginFormSchema = [
     {
       class: 'mb-2',
       name: 'email',
       type: 'email',
+      label: 'Email:',
       placeholder: 'Email',
       validationName: 'Email',
       validation: 'required',
@@ -52,21 +63,19 @@ export default class SignUp extends Vue {
       class: 'mb-4',
       name: 'password',
       type: 'password',
+      label: 'Password:',
       placeholder: 'Password',
       validationName: 'Password',
       validation: 'required',
     },
-    {
-      type: 'submit',
-      label: 'Log in',
-      class: 'mb-2',
-    },
   ]
-  signUpForm = {}
+  loginForm = {}
+  isWorking = false
 
   firebaseEmailPasswordLogin(form: { email: string; password: string }) {
     console.log(form)
 
+    this.isWorking = true
     firebase
       .auth()
       .signInWithEmailAndPassword(form.email, form.password)
@@ -79,6 +88,9 @@ export default class SignUp extends Vue {
         var errorMessage = error.message
         console.error(error)
         alert('Something went wrong: ' + errorMessage)
+      })
+      .finally(() => {
+        this.isWorking = false
       })
   }
 }
