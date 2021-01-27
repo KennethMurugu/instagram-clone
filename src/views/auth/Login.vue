@@ -14,7 +14,7 @@
           <FormulateInput type="submit" class="mb-2" :disabled="isWorking">
             <fa-icon
               icon="spinner"
-              spin="true"
+              :spin="true"
               class="fa-lg"
               v-if="isWorking"
             ></fa-icon>

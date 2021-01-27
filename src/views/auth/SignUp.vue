@@ -26,11 +26,11 @@
           <FormulateInput type="submit" class="mb-2" :disabled="isWorking">
             <fa-icon
               icon="spinner"
-              spin="true"
+              :spin="true"
               class="fa-lg"
               v-if="isWorking"
             ></fa-icon>
-            <span v-else>Log in</span>
+            <span v-else>Sign up</span>
           </FormulateInput>
 
           <p class="mb-6">
