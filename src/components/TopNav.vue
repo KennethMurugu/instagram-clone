@@ -27,30 +27,34 @@
 
         <div class="profile-dropdown" :class="{show: showProfileDropdown}">
             <div class="arrow"></div>
-          <div class="item">
-            <div class="icon-column">
-              <fa-icon class="fa-fw" :icon="['far', 'user']"></fa-icon>
+            <div class="item">
+                <div class="icon-column">
+                <fa-icon class="fa-fw" :icon="['far', 'user']"></fa-icon>
+                </div>
+                <div class="text">Profile</div>
             </div>
-            <div class="text">Profile</div>
-          </div>
-          <div class="item">
-            <div class="icon-column">
-              <fa-icon class="fa-fw" :icon="['far', 'bookmark']"></fa-icon>
+            <div class="item">
+                <div class="icon-column">
+                <fa-icon class="fa-fw" :icon="['far', 'bookmark']"></fa-icon>
+                </div>
+                <div class="text">Saved</div>
             </div>
-            <div class="text">Saved</div>
-          </div>
-          <div class="item">
-            <div class="icon-column">
-              <fa-icon class="fa-fw" icon="cog"></fa-icon>
+            <div class="item">
+                <div class="icon-column">
+                <fa-icon class="fa-fw" icon="cog"></fa-icon>
+                </div>
+                <div class="text">Settings</div>
             </div>
-            <div class="text">Settings</div>
-          </div>
-          <div class="item">
-            <div class="icon-column">
-              <fa-icon class="fa-fw" icon="sync-alt"></fa-icon>
+            <div class="item">
+                <div class="icon-column">
+                <fa-icon class="fa-fw" icon="sync-alt"></fa-icon>
+                </div>
+                <div class="text">Switch Accounts</div>
             </div>
-            <div class="text">Switch Accounts</div>
-          </div>
+            <div class="divider"></div>
+            <div class="item no-grid" @click="logoutUser">
+                <div class="text">Log out</div>
+            </div>
           </div>
         </div>
         <!-- <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>landing page, home, house, building, web</title><path d="M21.8,6.78,13.68,1.49a3.1,3.1,0,0,0-3.36,0L2.2,6.78A2.46,2.46,0,0,0,1,8.84V23h9V17.43h4V23h9V8.84A2.46,2.46,0,0,0,21.8,6.78ZM21,21H16V15.43H8V21H3V8.84a.49.49,0,0,1,.26-.39l8.12-5.29a1.14,1.14,0,0,1,1.18,0l8.12,5.29a.49.49,0,0,1,.26.39Z"/></svg> -->
@@ -61,10 +65,24 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import firebase from '@/vendor/firebase'
 
 @Component({})
 export default class TopNav extends Vue {
   showProfileDropdown = false
+
+  logoutUser() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        alert('Log out successful!')
+        this.$router.push('/login')
+      })
+      .catch((error) => {
+        alert('Somethig went wrong: ' + error.message)
+      })
+  }
 }
 </script>
 
@@ -156,6 +174,12 @@ export default class TopNav extends Vue {
     pointer-events: all;
   }
 
+  .divider {
+    background-color: mix(#000, #fff, 5%);
+    height: 1px;
+    width: 100;
+  }
+
   .item {
     display: grid;
     grid-template-columns: 25px auto;
@@ -164,6 +188,10 @@ export default class TopNav extends Vue {
 
     &:hover {
       background-color: mix(#000, #fff, 3%);
+    }
+
+    &.no-grid {
+      display: block;
     }
   }
 

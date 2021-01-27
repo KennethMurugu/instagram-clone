@@ -7,11 +7,16 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import TopNav from '@/components/TopNav.vue'
+import firebase from '@/vendor/firebase'
 
 @Component({
   components: { TopNav },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  currentUser() {
+    return firebase.auth().currentUser
+  }
+}
 </script>
 
 
