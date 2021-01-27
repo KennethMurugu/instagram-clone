@@ -45,6 +45,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
+import router from '@/router'
 
 @Component
 export default class Login extends Vue {
@@ -82,6 +83,7 @@ export default class Login extends Vue {
       .then((userCredentials) => {
         const email = userCredentials.user?.email
         alert(`Login successful as ${email}`)
+        router.push('/')
       })
       .catch((error) => {
         var errorCode = error.code

@@ -6,9 +6,18 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import {faFacebookSquare}  from '@fortawesome/free-brands-svg-icons'
 
 // Solid
-import {faSpinner} from '@fortawesome/free-solid-svg-icons'
+import {faSpinner, faSearch, faCog, faSyncAlt} from '@fortawesome/free-solid-svg-icons'
 
-library.add(faFacebookSquare, faSpinner)
+//Regular
+import {faUser, faBookmark,} from '@fortawesome/free-regular-svg-icons'
+
+library.add(
+    // Brands
+    faFacebookSquare, 
+    // Solid
+    faSpinner, faSearch, faCog, faSyncAlt,
+    // Regular
+    faUser, faBookmark)
 
 
 Vue.component('fa-icon', FontAwesomeIcon)
