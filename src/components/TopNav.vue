@@ -98,7 +98,7 @@ export default class TopNav extends Vue {
 
 .nav-content {
   width: 975px;
-
+  padding: 0 20px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 5rem;
@@ -107,11 +107,11 @@ export default class TopNav extends Vue {
 
 .search-container {
   position: relative;
-  padding: 0 3rem;
+  padding: 0 2rem;
   .icon {
     position: absolute;
     top: 50%;
-    left: 4rem;
+    left: 3rem;
     transform: translateY(-50%);
     color: mix(#000, #fff, 30%);
   }
@@ -123,7 +123,7 @@ export default class TopNav extends Vue {
   border: 1px solid mix(#000, #fff, 20%);
   background-color: mix(#000, #fff, 5%);
   border-radius: 3px;
-  font-size: 0.9rem;
+  font-size: 1rem;
   width: 100%;
 }
 
@@ -131,7 +131,7 @@ export default class TopNav extends Vue {
   justify-self: end;
   display: grid;
   grid-template-columns: repeat(5, 25px);
-  column-gap: 2rem;
+  column-gap: 1.5rem;
   align-items: center;
   position: relative;
   .icon {
