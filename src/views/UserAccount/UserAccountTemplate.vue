@@ -62,7 +62,7 @@
           :to="`/${userAccount.user_name}/channel`"
           class="tab"
           :class="{ selected: activeTab == 1 }"
-          @click.native="setTab(1)"
+          @click.native="activeTab = 1"
         >
           <fa-icon icon="tv" class="fa-fw"></fa-icon> IGTV
         </router-link>
@@ -117,10 +117,6 @@ export default class UserAccountTemplate extends Vue {
       .catch(error => {
         alert(error.message)
       })
-  }
-
-  setTab(which: number) {
-    this.activeTab = which
   }
 }
 </script>
