@@ -13,7 +13,14 @@ const routes: Array<RouteConfig> = [
   },
 
   // Auth
-  ...auth
+  ...auth,
+
+  {
+    path: '/:user_name',
+    props: true,
+    name: 'UserAccount',
+    component: () => import('@/views/UserAccount.vue')
+  }
 ]
 
 const router = new VueRouter({

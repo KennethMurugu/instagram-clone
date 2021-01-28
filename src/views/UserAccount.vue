@@ -1,12 +1,14 @@
 <template>
-  <div class="home"></div>
+  <div class="user-account">
+    USER ACCOUNT
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({})
-export default class Home extends Vue {}
+export default class UserAccount extends Vue {}
 </script>
 
 <style lang="scss" scoped></style>

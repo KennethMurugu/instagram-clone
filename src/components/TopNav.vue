@@ -1,7 +1,7 @@
 <template>
   <nav class="main-nav">
     <div class="nav-content mx-auto">
-      <div class="logo"><h1>Instagram</h1></div>
+      <router-link to="/" class="logo"><h1>Instagram</h1></router-link>
       <div class="search-container">
         <input
           type="text"
@@ -21,44 +21,47 @@
           :src="require('@/assets/img/user-pic-placeholder.jpg')"
           alt=""
           class="user-pic"
-          :class="{'dropdown-open': showProfileDropdown}"
+          :class="{ 'dropdown-open': showProfileDropdown }"
           @click="showProfileDropdown = !showProfileDropdown"
         />
 
-        <div class="profile-dropdown" :class="{show: showProfileDropdown}">
-            <div class="arrow"></div>
-            <div class="item">
-                <div class="icon-column">
-                <fa-icon class="fa-fw" :icon="['far', 'user']"></fa-icon>
-                </div>
-                <div class="text">Profile</div>
+        <div
+          class="profile-dropdown"
+          :class="{ show: showProfileDropdown }"
+          @click="showProfileDropdown = showProfileDropdown"
+        >
+          <div class="arrow"></div>
+          <router-link :to="`/${userAccount.user_name}`" class="item">
+            <div class="icon-column">
+              <fa-icon class="fa-fw" :icon="['far', 'user']"></fa-icon>
             </div>
-            <div class="item">
-                <div class="icon-column">
-                <fa-icon class="fa-fw" :icon="['far', 'bookmark']"></fa-icon>
-                </div>
-                <div class="text">Saved</div>
+            <div class="text">Profile</div>
+          </router-link>
+          <div class="item">
+            <div class="icon-column">
+              <fa-icon class="fa-fw" :icon="['far', 'bookmark']"></fa-icon>
             </div>
-            <div class="item">
-                <div class="icon-column">
-                <fa-icon class="fa-fw" icon="cog"></fa-icon>
-                </div>
-                <div class="text">Settings</div>
+            <div class="text">Saved</div>
+          </div>
+          <div class="item">
+            <div class="icon-column">
+              <fa-icon class="fa-fw" icon="cog"></fa-icon>
             </div>
-            <div class="item">
-                <div class="icon-column">
-                <fa-icon class="fa-fw" icon="sync-alt"></fa-icon>
-                </div>
-                <div class="text">Switch Accounts</div>
+            <div class="text">Settings</div>
+          </div>
+          <div class="item">
+            <div class="icon-column">
+              <fa-icon class="fa-fw" icon="sync-alt"></fa-icon>
             </div>
-            <div class="divider"></div>
-            <div class="item no-grid" @click="logoutUser">
-                <div class="text">Log out</div>
-            </div>
+            <div class="text">Switch Accounts</div>
+          </div>
+          <div class="divider"></div>
+          <div class="item no-grid" @click="logoutUser">
+            <div class="text">Log out</div>
           </div>
         </div>
-        <!-- <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>landing page, home, house, building, web</title><path d="M21.8,6.78,13.68,1.49a3.1,3.1,0,0,0-3.36,0L2.2,6.78A2.46,2.46,0,0,0,1,8.84V23h9V17.43h4V23h9V8.84A2.46,2.46,0,0,0,21.8,6.78ZM21,21H16V15.43H8V21H3V8.84a.49.49,0,0,1,.26-.39l8.12-5.29a1.14,1.14,0,0,1,1.18,0l8.12,5.29a.49.49,0,0,1,.26.39Z"/></svg> -->
       </div>
+      <!-- <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>landing page, home, house, building, web</title><path d="M21.8,6.78,13.68,1.49a3.1,3.1,0,0,0-3.36,0L2.2,6.78A2.46,2.46,0,0,0,1,8.84V23h9V17.43h4V23h9V8.84A2.46,2.46,0,0,0,21.8,6.78ZM21,21H16V15.43H8V21H3V8.84a.49.49,0,0,1,.26-.39l8.12-5.29a1.14,1.14,0,0,1,1.18,0l8.12,5.29a.49.49,0,0,1,.26.39Z"/></svg> -->
     </div>
   </nav>
 </template>
@@ -66,20 +69,52 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
+import { UserAccount } from '@/vendor/firebase/db/models'
+import { usernamesPath } from '@/vendor/firebase/dbrefs'
 
 @Component({})
 export default class TopNav extends Vue {
   showProfileDropdown = false
+  userAccount: UserAccount = {
+    user_name: ''
+  }
+
+  mounted() {
+    this.getUserAccount()
+  }
+
+  getUserAccount() {
+    const currentUserID = sessionStorage.getItem('instagram-clone-uid')!
+
+    firebase
+      .database()
+      .ref(usernamesPath(currentUserID))
+      .once('value')
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          console.log(snapshot.val())
+          const user_name = snapshot.val()
+          this.userAccount.user_name = user_name
+        } else {
+          throw new Error('No username data found')
+        }
+      })
+      .catch(error => {
+        alert('Somethig went wrong: ' + error.message)
+      })
+  }
 
   logoutUser() {
     firebase
       .auth()
       .signOut()
       .then(() => {
-        alert('Log out successful!')
+        alert('Log out  successful!')
+        // Clear session data
+        sessionStorage.removeItem('instagram-clone-uid')
         this.$router.push('/login')
       })
-      .catch((error) => {
+      .catch(error => {
         alert('Somethig went wrong: ' + error.message)
       })
   }
@@ -104,7 +139,10 @@ export default class TopNav extends Vue {
   column-gap: 5rem;
   align-items: center;
 }
-
+.logo {
+  color: #000;
+  font-weight: normal;
+}
 .search-container {
   position: relative;
   padding: 0 2rem;
@@ -185,6 +223,8 @@ export default class TopNav extends Vue {
     grid-template-columns: 25px auto;
     padding: 0.75rem;
     cursor: pointer;
+    color: #000;
+    font-weight: normal;
 
     &:hover {
       background-color: mix(#000, #fff, 3%);

@@ -52,7 +52,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
-import { userAccountsPath } from '@/vendor/firebase/dbrefs'
+import { userAccountsPath, usernamesPath } from '@/vendor/firebase/dbrefs'
 
 // import { ui } from '@/vendor/firebase'
 
@@ -65,7 +65,7 @@ export default class SignUp extends Vue {
       label: 'Email:',
       placeholder: 'Email',
       validationName: 'Email',
-      validation: 'required',
+      validation: 'required'
     },
     {
       class: 'mb-2',
@@ -73,7 +73,7 @@ export default class SignUp extends Vue {
       label: 'Full Name:',
       placeholder: 'Full Name',
       validationName: 'Full Name',
-      validation: 'required',
+      validation: 'required'
     },
     {
       class: 'mb-2',
@@ -81,7 +81,7 @@ export default class SignUp extends Vue {
       label: 'Username:',
       placeholder: 'Username',
       validationName: 'Username',
-      validation: 'required|alphanumeric',
+      validation: 'required|alphanumeric'
     },
     {
       class: 'mb-4',
@@ -90,7 +90,7 @@ export default class SignUp extends Vue {
       label: 'Password:',
       placeholder: 'Password',
       validationName: 'Password',
-      validation: 'required|min:6,length',
+      validation: 'required|min:6,length'
     },
     {
       class: 'mb-4',
@@ -98,8 +98,8 @@ export default class SignUp extends Vue {
       label: 'Confirm password:',
       placeholder: 'Confirm password',
       validationName: 'Password confirmation',
-      validation: '^required|confirm:password',
-    },
+      validation: '^required|confirm:password'
+    }
   ]
   signUpForm = {}
   isWorking = false
@@ -129,6 +129,13 @@ export default class SignUp extends Vue {
       .set(userSignupDetails)
   }
 
+  addUserNameToDatabase(uid: string, user_name: string) {
+    return firebase
+      .database()
+      .ref(usernamesPath(uid))
+      .set(user_name)
+  }
+
   emailSignUp(form: {
     email: string
     full_name: string
@@ -138,9 +145,17 @@ export default class SignUp extends Vue {
     console.log(form)
 
     this.isWorking = true
+    let userSignupDetails = {
+      uid: '',
+      email: form.email,
+      phone: '',
+      full_name: form.full_name,
+      user_name: form.user_name,
+      password: form.password
+    }
     // Check if username is unique
     this.checkIfUserNameExists(form.user_name)
-      .then((snapshot) => {
+      .then(snapshot => {
         if (snapshot.exists()) {
           // this user exists;
           throw new Error(`The username ${form.user_name} is already taken.`)
@@ -149,23 +164,23 @@ export default class SignUp extends Vue {
           return this.createUserCredentials(form.email, form.password)
         }
       })
-      .then((userCredential) => {
+      .then(userCredential => {
         // Create user account in DB
-        const userSignupDetails = {
-          uid: userCredential.user?.uid!,
-          email: form.email,
-          phone: '',
-          full_name: form.full_name,
-          user_name: form.user_name,
-          password: form.password,
-        }
+        userSignupDetails.uid = userCredential.user?.uid!
 
         return this.createUserAccountInDatabase(userSignupDetails)
       })
-      .then((database) => {
-        alert(`Signed up as ${form.email}`)
+      .then(() => {
+        return this.addUserNameToDatabase(
+          userSignupDetails.uid,
+          userSignupDetails.user_name
+        )
       })
-      .catch((error) => {
+      .then(() => {
+        alert(`Signed up as ${form.email}`)
+        this.$router.push('/')
+      })
+      .catch(error => {
         console.error(error)
         alert('Something went wrong: ' + error.message)
       })

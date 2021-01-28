@@ -7,6 +7,8 @@ Vue.config.productionTip = false
 
 // Vendor scripts
 import '@/vendor/fontawesome'
+import '@/vendor/firebase/serviceinit'
+
 //@ts-ignore
 import VueFormulate from '@braid/vue-formulate'
 Vue.use(VueFormulate)
