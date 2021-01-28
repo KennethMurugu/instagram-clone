@@ -52,7 +52,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
-import { userAccountsPath, usernamesPath } from '@/vendor/firebase/dbrefs'
+import { userAccountsPath, usernamesPath } from '@/vendor/firebase/db/refs'
 
 // import { ui } from '@/vendor/firebase'
 

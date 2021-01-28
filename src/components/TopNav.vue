@@ -70,7 +70,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import { UserAccount } from '@/vendor/firebase/db/models'
-import { usernamesPath } from '@/vendor/firebase/dbrefs'
+import { usernamesPath } from '@/vendor/firebase/db/refs'
 
 @Component({})
 export default class TopNav extends Vue {
