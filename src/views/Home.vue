@@ -1,12 +1,24 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
+    <TopNav />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue } from 'vue-property-decorator'
+import TopNav from '@/components/TopNav.vue'
+import firebase from '@/vendor/firebase'
 
-@Component({})
-export default class Home extends Vue {}
+@Component({
+  components: { TopNav },
+})
+export default class Home extends Vue {
+  currentUser() {
+    return firebase.auth().currentUser
+  }
+}
 </script>
+
+
+<style lang="scss" scoped>
+</style>

@@ -1,7 +1,7 @@
 // Abstracts
 @import './abstracts/vars';
 @import './abstracts/spacing-helpers';
-@import './abstracts/typography-overrides';
+@import './abstracts/typography-helpers';
 
 // Mixins
 @import './abstracts/mixins';
@@ -11,6 +11,7 @@
 @import './vendor/vue-formulate/snow-override.scss';
 
 // Components
+@import './components/base';
 @import './components/panel';
 @import './components/buttons';
 
