@@ -100,7 +100,7 @@ export default class TopNav extends Vue {
         }
       })
       .catch(error => {
-        alert('Somethig went wrong: ' + error.message)
+        alert('Something went wrong: ' + error.message)
       })
   }
 
