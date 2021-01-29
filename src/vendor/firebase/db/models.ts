@@ -4,4 +4,5 @@ export interface UserAccount {
   phone?: string
   uid?: string
   user_name?: string
+  bio?: string
 }

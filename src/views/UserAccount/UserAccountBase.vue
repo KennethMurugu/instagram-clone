@@ -9,7 +9,7 @@
 
       <div class="user-details mb-12">
         <div class="header mb-7">
-          <p class="user-name mr-6">kendotkim</p>
+          <p class="user-name mr-6">{{ userAccount.user_name }}</p>
           <router-link to="/accounts/edit" class="link-edit-profile mr-6"
             >Edit Profile</router-link
           >
@@ -34,12 +34,11 @@
         </div>
 
         <div class="personal-details">
-          <p class="full-name mb-2"><b>Kenneth Murugu</b></p>
+          <p class="full-name mb-2">
+            <b>{{ userAccount.full_name }}</b>
+          </p>
           <p class="bio mb-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
-            quisquam, laborum consequatur corrupti fugiat quaerat possimus iusto
-            cupiditate modi error quo ab dolor exercitationem eius natus nulla
-            voluptates doloribus at!
+            {{ userAccount.bio }}
           </p>
           <p class="website">
             <a href="https://kenkim.co.ke" target="_blank">kenkim.co.ke</a>
@@ -109,12 +108,12 @@ export default class UserAccountBase extends Vue {
       .database()
       .ref(userAccountsPath(this.user_name))
       .once('value')
-      .then(snapshot => {
+      .then((snapshot) => {
         console.log(snapshot.toJSON())
         const obj = snapshot.toJSON()
         if (obj) this.userAccount = obj
       })
-      .catch(error => {
+      .catch((error) => {
         alert(error.message)
       })
   }
@@ -178,18 +177,18 @@ export default class UserAccountBase extends Vue {
   margin-left: auto;
   margin-right: auto;
   display: grid;
-  grid-template-columns: repeat(4, 100px);
+  grid-template-columns: repeat(4, 110px);
   column-gap: 2rem;
   justify-content: center;
 
   .tab {
     text-transform: uppercase;
-    padding: 1rem;
+    padding: 1.5rem 1rem;
     text-align: center;
     color: mix(#fff, #000, 30%);
     border-top: 1px solid transparent;
     transform: translateY(-1px);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 
     &.selected {
       border-color: mix(#fff, #000, 10%);
