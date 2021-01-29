@@ -8,8 +8,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Reels from '@/components/Reels'
-import UserPost from '@/components/UserPost'
+import Reels from '@/components/Reels.vue'
+import UserPost from '@/components/UserPost.vue'
 
 @Component({
   components: { Reels, UserPost },

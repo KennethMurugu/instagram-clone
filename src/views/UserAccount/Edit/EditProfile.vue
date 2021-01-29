@@ -136,7 +136,7 @@ export default class EditProfile extends Vue {
   updateUserAccountDetails() {
     firebase
       .database()
-      .ref(userAccountsPath(this.userAccount.user_name))
+      .ref(userAccountsPath(this.userAccount.user_name!))
       .update(this.userAccount)
       .then(() => {
         alert('Profile updated successfully!')
