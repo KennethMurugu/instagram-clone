@@ -16,7 +16,13 @@ const routes: Array<RouteConfig> = [
   // Auth
   ...auth,
   // User
-  ...user
+  ...user,
+  {
+    path: '*',
+    props: true,
+    name: 'EditEmpty',
+    component: () => import('@/views/PageNotFound.vue')
+  },
 ]
 
 const router = new VueRouter({

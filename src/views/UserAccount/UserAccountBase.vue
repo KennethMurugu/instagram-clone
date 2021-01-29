@@ -95,6 +95,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import { UserAccount } from '@/vendor/firebase/db/models'
 import { userAccountsPath } from '@/vendor/firebase/db/refs'
+
 @Component({})
 export default class UserAccountBase extends Vue {
   @Prop(String) readonly user_name!: string

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <TopNav />
+    <TopNav v-if="$store.state.isTopNavShowing" />
     <router-view> </router-view>
   </div>
 </template>

@@ -73,6 +73,10 @@ export default class Login extends Vue {
   loginForm = {}
   isWorking = false
 
+  mounted() {
+    this.$store.commit('toggleTopNav', false)
+  }
+
   firebaseEmailPasswordLogin(form: { email: string; password: string }) {
     console.log(form)
 

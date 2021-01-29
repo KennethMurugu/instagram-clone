@@ -1,6 +1,22 @@
 import { RouteConfig } from 'vue-router'
 
 const router: RouteConfig[] = [
+  // Edit
+  {
+    path: '/accounts',
+    props: true,
+    component: () => import('@/views/UserAccount/Edit/EditProfileBase.vue'),
+    children: [
+      {
+        path: 'edit',
+        props: true,
+        name: 'EditProfile',
+        component: () => import('@/views/UserAccount/Edit/EditProfile.vue')
+      }
+    ]
+  },
+  
+  // User profile
   {
     path: '/:user_name',
     props: true,
@@ -31,7 +47,7 @@ const router: RouteConfig[] = [
         component: () => import('@/views/UserAccount/UserTagged.vue')
       }
     ]
-  }
+  },
 ]
 
 export default router
