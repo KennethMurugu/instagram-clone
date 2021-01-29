@@ -13,11 +13,12 @@ import {
   faSyncAlt,
   faBorderAll,
   faTv,
-  faUserTag
+  faUserTag,
+  faEllipsisH
 } from '@fortawesome/free-solid-svg-icons'
 
 //Regular
-import { faUser, faBookmark } from '@fortawesome/free-regular-svg-icons'
+import { faUser, faBookmark, faComment, faHeart, faPaperPlane, faSmile } from '@fortawesome/free-regular-svg-icons'
 
 library.add(
   // Brands
@@ -30,9 +31,15 @@ library.add(
   faBorderAll,
   faTv,
   faUserTag,
+  faEllipsisH,
+  
   // Regular
   faUser,
-  faBookmark
+  faBookmark,
+  faComment,
+  faHeart,
+  faPaperPlane,
+  faSmile
 )
 
 Vue.component('fa-icon', FontAwesomeIcon)

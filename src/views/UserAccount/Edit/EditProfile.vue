@@ -22,7 +22,7 @@
         <input
           type="text"
           class="edit-profile-input mb-2"
-          v-model="userAccount.email"
+          v-model="userAccount.full_name"
         />
         <p>
           <small>
@@ -46,6 +46,7 @@
           type="text"
           class="edit-profile-input mb-2"
           v-model="userAccount.user_name"
+          disabled
         />
         <p>
           <small>
@@ -85,7 +86,7 @@
     <div class="row">
       <div class="section-left"></div>
       <div class="section-right">
-        <button class="btn">Submit</button>
+        <button class="btn" @click="updateUserAccountDetails">Submit</button>
       </div>
     </div>
   </div>
@@ -100,7 +101,6 @@ import firebase from '@/vendor/firebase'
 @Component({})
 export default class EditProfile extends Vue {
   userAccount: UserAccount = {}
-  profileFormSchema = {}
 
   mounted() {
     // Get username from uid (get from session)
@@ -130,6 +130,20 @@ export default class EditProfile extends Vue {
       .catch((error) => {
         alert(error.message)
         console.error(error)
+      })
+  }
+
+  updateUserAccountDetails() {
+    firebase
+      .database()
+      .ref(userAccountsPath(this.userAccount.user_name))
+      .update(this.userAccount)
+      .then(() => {
+        alert('Profile updated successfully!')
+      })
+      .catch((error) => {
+        console.error(error)
+        alert(error.message)
       })
   }
 }
