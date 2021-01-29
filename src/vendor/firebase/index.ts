@@ -4,12 +4,12 @@ import firebase from 'firebase/app'
 
 // Your web app's Firebase configuration
 let firebaseConfig = {
-  apiKey: 'AIzaSyDtIntdZTM8fEYCSVpg_TG_J3zLSb-It64',
-  authDomain: 'instagram-clone-vue-firebase.firebaseapp.com',
-  projectId: 'instagram-clone-vue-firebase',
-  storageBucket: 'instagram-clone-vue-firebase.appspot.com',
-  messagingSenderId: '367689805296',
-  appId: '1:367689805296:web:3560c793a1aca6f566c135'
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+  authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_FIREBASE_APP_ID
 }
 
 // Initialize Firebase
