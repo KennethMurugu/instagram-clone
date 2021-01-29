@@ -9,13 +9,11 @@
       <p class="user-name mr-auto">hardwarecanucks</p>
       <fa-icon icon="ellipsis-h"></fa-icon>
     </div>
-    <div class="post-image">
-      <img
-        :src="require('@/assets/img/user-post-sample.jpg')"
-        alt=""
-        class="img"
-      />
-    </div>
+    <img
+      :src="require('@/assets/img/user-post-sample.jpg')"
+      alt=""
+      class="post-image"
+    />
     <div class="post-actions pa-4">
       <div class="section-left">
         <fa-icon :icon="['far', 'heart']" class="fa-lg fa-fw mr-3"></fa-icon>
@@ -81,9 +79,8 @@ export default class UserPost extends Vue {}
 }
 
 .post-image {
-  .img {
-    width: 100%;
-  }
+  background-color: #000;
+  width: 100%;
 }
 
 .post-actions {
@@ -91,8 +88,6 @@ export default class UserPost extends Vue {}
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  //   font-size: 1.5rem;
-
   .bookmark {
     justify-self: end;
   }

@@ -104,6 +104,8 @@ export default class UserAccountBase extends Vue {
   activeTab = 0
 
   mounted() {
+    this.$store.commit('toggleTopNav', true)
+
     // Get user details
     firebase
       .database()
@@ -123,7 +125,7 @@ export default class UserAccountBase extends Vue {
 
 <style lang="scss" scoped>
 .user-details-container {
-  width: 935px;
+  width: $max-content-width;
   display: grid;
   grid-template-columns: 300px auto;
   margin-left: auto;
@@ -174,7 +176,7 @@ export default class UserAccountBase extends Vue {
 
 .tabs {
   border-top: 1px solid mix(#000, $page-bg, 10%);
-  width: 935px;
+  width: $max-content-width;
   margin-left: auto;
   margin-right: auto;
   display: grid;
@@ -198,7 +200,7 @@ export default class UserAccountBase extends Vue {
 }
 
 .content {
-  max-width: 935px;
+  max-width: $max-content-width;
   margin-left: auto;
   margin-right: auto;
 }

@@ -45,13 +45,15 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 export default class EditProfileBase extends Vue {
   @Prop(String) readonly user_name!: string
 
-  mounted() {}
+  mounted() {
+    this.$store.commit('toggleTopNav', true)
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .edit-profile-base {
-  max-width: 935px;
+  max-width: $max-content-width;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 250px auto;

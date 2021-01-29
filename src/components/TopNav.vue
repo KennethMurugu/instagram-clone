@@ -43,12 +43,12 @@
             </div>
             <div class="text">Saved</div>
           </div>
-          <div class="item">
+          <router-link to="/accounts/edit" class="item">
             <div class="icon-column">
               <fa-icon class="fa-fw" icon="cog"></fa-icon>
             </div>
             <div class="text">Settings</div>
-          </div>
+          </router-link>
           <div class="item">
             <div class="icon-column">
               <fa-icon class="fa-fw" icon="sync-alt"></fa-icon>
@@ -76,7 +76,7 @@ import { usernamesPath } from '@/vendor/firebase/db/refs'
 export default class TopNav extends Vue {
   showProfileDropdown = false
   userAccount: UserAccount = {
-    user_name: ''
+    user_name: '',
   }
 
   mounted() {
@@ -90,7 +90,7 @@ export default class TopNav extends Vue {
       .database()
       .ref(usernamesPath(currentUserID))
       .once('value')
-      .then(snapshot => {
+      .then((snapshot) => {
         if (snapshot.exists()) {
           console.log(snapshot.val())
           const user_name = snapshot.val()
@@ -99,7 +99,7 @@ export default class TopNav extends Vue {
           throw new Error('No username data found')
         }
       })
-      .catch(error => {
+      .catch((error) => {
         alert('Something went wrong: ' + error.message)
       })
   }
@@ -114,7 +114,7 @@ export default class TopNav extends Vue {
         sessionStorage.removeItem('instagram-clone-uid')
         this.$router.push('/login')
       })
-      .catch(error => {
+      .catch((error) => {
         alert('Somethig went wrong: ' + error.message)
       })
   }
@@ -129,6 +129,8 @@ export default class TopNav extends Vue {
   border-bottom: 1px solid rgb(219, 219, 219);
   display: grid;
   align-items: center;
+  position: sticky;
+  top: 0;
 }
 
 .nav-content {
