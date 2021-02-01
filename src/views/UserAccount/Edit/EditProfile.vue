@@ -99,6 +99,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { UserAccount } from '@/vendor/firebase/db/models'
 import { userAccountsPath, usernamesPath } from '@/vendor/firebase/db/refs'
 import firebase from '@/vendor/firebase'
+import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
 
 @Component({})
 export default class EditProfile extends Vue {
@@ -125,7 +126,7 @@ export default class EditProfile extends Vue {
 
   userImgSelected(file: Blob, progress: (val: number) => void) {
     progress(25)
-    // Upload to profile_photos/<user_id>
+    // Upload to storage:profile_photos/<user_id>
     const profilePhotoRef = firebase
       .storage()
       .ref(`profile_photos/${this.userAccount.uid}`)
@@ -134,7 +135,7 @@ export default class EditProfile extends Vue {
       .then(snapshot => {
         progress(75)
 
-        // Update accounts/<user_name>/profile_photo
+        // Update db:accounts/<user_name>/profile_photo
         return firebase
           .database()
           .ref(`accounts/${this.userAccount.uid}`)
@@ -151,19 +152,14 @@ export default class EditProfile extends Vue {
   }
 
   getUserProfilePhotoFromStorage() {
-    if (this.userAccount.profile_photo) {
-      firebase
-        .storage()
-        .ref(`/profile_photos/${this.userAccount.profile_photo}`)
-        .getDownloadURL()
-        .then(url => {
-          this.userProfileUrl = url
-        })
-        .catch(error => {
-          console.error(error)
-          alert('Could not get user profile url: ' + error.message)
-        })
-    }
+    getUserProfilePhotoFromStorage()
+      .then(url => {
+        this.userProfileUrl = url
+      })
+      .catch(error => {
+        console.error(error)
+        alert('Could not get user profile photo: ' + error.message)
+      })
   }
 }
 </script>

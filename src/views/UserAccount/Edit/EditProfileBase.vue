@@ -39,6 +39,7 @@
 </template>
 
 <script lang="ts">
+import { UserAccount } from '@/vendor/firebase/db/models'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({})

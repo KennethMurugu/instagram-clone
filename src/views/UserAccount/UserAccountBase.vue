@@ -1,11 +1,7 @@
 <template>
   <div class="user-account pb-12">
     <div class="user-details-container pt-10">
-      <img
-        :src="require('@/assets/img/user-pic-placeholder.jpg')"
-        alt=""
-        class="user-pic"
-      />
+      <img :src="userProfileUrl" alt="" class="user-pic" />
 
       <div class="user-details mb-12">
         <div class="header mb-7">
@@ -92,10 +88,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import firebase from '@/vendor/firebase'
 import { UserAccount } from '@/vendor/firebase/db/models'
-import { userAccountsPath } from '@/vendor/firebase/db/refs'
-import { getUserAccountFromStorage } from '@/vendor/firebase/db/utils'
+import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
 
 @Component({})
 export default class UserAccountBase extends Vue {
@@ -103,24 +97,18 @@ export default class UserAccountBase extends Vue {
   currentUserName = ''
   userAccount: UserAccount = this.$store.state.userAccount
   activeTab = 0
+  userProfileUrl = '/user-profile-photo-placeholder.svg'
 
   mounted() {
     this.$store.commit('toggleTopNav', true)
 
-    // Get user details
-    //   firebase
-    //     .database()
-    //     .ref(userAccountsPath(this.user_name))
-    //     .once('value')
-    //     .then(snapshot => {
-    //       console.log(snapshot.toJSON())
-    //       const obj = snapshot.toJSON()
-    //       if (obj) this.userAccount = obj
-    //     })
-    //     .catch(error => {
-    //       alert(error.message)
-    //     })
-    // }
+    getUserProfilePhotoFromStorage()
+      .then(url => {
+        this.userProfileUrl = url
+      })
+      .catch(error => {
+        alert(error.message)
+      })
   }
 }
 </script>

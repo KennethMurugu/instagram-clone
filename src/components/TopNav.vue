@@ -73,7 +73,7 @@ import { UserAccount } from '@/vendor/firebase/db/models'
 import { usernamesPath } from '@/vendor/firebase/db/refs'
 import {
   disableUserAccountChangesCallback,
-  getUserAccountFromStorage
+  getUserProfilePhotoFromStorage
 } from '@/vendor/firebase/db/utils'
 
 @Component({})
@@ -87,19 +87,14 @@ export default class TopNav extends Vue {
   }
 
   getUserProfilePhotoFromStorage() {
-    if (this.userAccount.profile_photo) {
-      firebase
-        .storage()
-        .ref(`/profile_photos/${this.userAccount.profile_photo}`)
-        .getDownloadURL()
-        .then(url => {
-          this.userProfileUrl = url
-        })
-        .catch(error => {
-          console.error(error)
-          alert('Could not get user profile url: ' + error.message)
-        })
-    }
+    getUserProfilePhotoFromStorage()
+      .then(url => {
+        this.userProfileUrl = url
+      })
+      .catch(error => {
+        console.error(error)
+        alert('Could not get user profile photo: ' + error.message)
+      })
   }
 
   logoutUser() {

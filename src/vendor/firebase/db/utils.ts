@@ -1,7 +1,19 @@
 import firebase from '@/vendor/firebase'
+import { UserAccount } from './models'
 
 export function getUserAccountFromStorage() {
   return JSON.parse(sessionStorage.getItem('instagram-clone-user-account')!)
+}
+
+export function getUserProfilePhotoFromStorage() {
+  const userAccount: UserAccount = JSON.parse(
+    sessionStorage.getItem('instagram-clone-user-account')!
+  )
+
+  return firebase
+    .storage()
+    .ref(`/profile_photos/${userAccount.profile_photo}`)
+    .getDownloadURL()
 }
 
 export function watchForUserAccountChanges() {

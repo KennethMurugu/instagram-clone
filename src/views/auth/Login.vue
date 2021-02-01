@@ -47,6 +47,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import router from '@/router'
 import { watchForUserAccountChanges } from '@/vendor/firebase/db/utils'
+import { UserAccount } from '@/vendor/firebase/db/models'
 
 @Component
 export default class Login extends Vue {
@@ -87,10 +88,29 @@ export default class Login extends Vue {
       .signInWithEmailAndPassword(form.email, form.password)
       .then(userCredentials => {
         const email = userCredentials.user?.email
-        alert(`Login successful as ${email}`)
 
-        watchForUserAccountChanges()
-        router.push('/')
+        // Get account details from db
+        return firebase
+          .database()
+          .ref(`accounts/${userCredentials.user?.uid}`)
+          .get()
+      })
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          // Save in SessionStorage
+          const userAccount: UserAccount = snapshot.toJSON()!
+          sessionStorage.setItem(
+            'instagram-clone-user-account',
+            JSON.stringify(userAccount)
+          )
+
+          watchForUserAccountChanges()
+
+          alert(`Login successful as ${userAccount.email}`)
+          router.push('/')
+        } else {
+          throw new Error('Snapshot was empty')
+        }
       })
       .catch(error => {
         var errorCode = error.code
