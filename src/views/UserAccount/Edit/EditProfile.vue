@@ -158,7 +158,7 @@ export default class EditProfile extends Vue {
       })
       .catch(error => {
         console.error(error)
-        alert('Could not get user profile photo: ' + error.message)
+        // alert('Could not get user profile photo: ' + error.message)
       })
   }
 }

@@ -3,7 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 
 // Brands
-import { faFacebookSquare } from '@fortawesome/free-brands-svg-icons'
+import {
+  faFacebookSquare,
+  faInstagram
+} from '@fortawesome/free-brands-svg-icons'
 
 // Solid
 import {
@@ -14,15 +17,24 @@ import {
   faBorderAll,
   faTv,
   faUserTag,
-  faEllipsisH
+  faEllipsisH,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons'
 
 //Regular
-import { faUser, faBookmark, faComment, faHeart, faPaperPlane, faSmile } from '@fortawesome/free-regular-svg-icons'
+import {
+  faUser,
+  faBookmark,
+  faComment,
+  faHeart,
+  faPaperPlane,
+  faSmile
+} from '@fortawesome/free-regular-svg-icons'
 
 library.add(
   // Brands
   faFacebookSquare,
+  faInstagram,
   // Solid
   faSpinner,
   faSearch,
@@ -32,7 +44,7 @@ library.add(
   faTv,
   faUserTag,
   faEllipsisH,
-  
+  faTimes,
   // Regular
   faUser,
   faBookmark,

@@ -10,10 +10,19 @@
           class="search-input"
         />
 
-        <fa-icon icon="search" class="icon"></fa-icon>
+        <span class="icon">
+          <fa-icon icon="search"></fa-icon>
+        </span>
       </div>
       <div class="action-buttons">
-        <img :src="require('@/assets/img/home.svg')" alt="" class="icon" />
+        <!-- <img  :src="require('@/assets/img/home.svg')" alt="" class="icon"/> -->
+        <router-link
+          tag="img"
+          to="/"
+          :src="require('@/assets/img/home.svg')"
+          alt=""
+          class="icon"
+        ></router-link>
         <img :src="require('@/assets/img/message.svg')" alt="" class="icon" />
         <img :src="require('@/assets/img/compass.svg')" alt="" class="icon" />
         <img :src="require('@/assets/img/heart.svg')" alt="" class="icon" />
@@ -67,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import { UserAccount } from '@/vendor/firebase/db/models'
 import { usernamesPath } from '@/vendor/firebase/db/refs'
@@ -82,18 +91,26 @@ export default class TopNav extends Vue {
   userAccount: UserAccount = this.$store.state.userAccount
   userProfileUrl = '/user-profile-photo-placeholder.svg'
 
-  mounted() {
-    this.getUserProfilePhotoFromStorage()
-  }
-
-  getUserProfilePhotoFromStorage() {
+  @Watch('userProfileUrl')
+  onChildChanged(val: string, oldVal: string) {
     getUserProfilePhotoFromStorage()
       .then(url => {
         this.userProfileUrl = url
       })
       .catch(error => {
         console.error(error)
-        alert('Could not get user profile photo: ' + error.message)
+        // alert('Could not get user profile photo: ' + error.message)
+      })
+  }
+
+  mounted() {
+    getUserProfilePhotoFromStorage()
+      .then(url => {
+        this.userProfileUrl = url
+      })
+      .catch(error => {
+        console.error(error)
+        // alert('Could not get user profile photo: ' + error.message)
       })
   }
 
@@ -202,6 +219,7 @@ export default class TopNav extends Vue {
   pointer-events: none;
   transition: all 0.2s ease;
   overflow-y: hidden;
+  z-index: 999999;
 
   &.show {
     transform: translateY(0px);

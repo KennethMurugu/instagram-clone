@@ -11,11 +11,15 @@ export default new Vuex.Store({
     isTopNavShowing: false,
     userAccount: JSON.parse(
       sessionStorage.getItem('instagram-clone-user-account')!
-    )
+    ),
+    showNewPostModal: false
   },
   mutations: {
     toggleTopNav(state: any, show: boolean) {
       state.isTopNavShowing = show
+    },
+    toggleNewPostModal(state: any, show: boolean) {
+      state.showNewPostModal = show
     }
     // saveUserAccount(state: any, userAccount: UserAccount) {
     //   state.userAccount = userAccount

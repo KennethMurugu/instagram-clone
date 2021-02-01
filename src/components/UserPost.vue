@@ -1,19 +1,11 @@
 <template>
   <div class="user-post">
     <div class="header pa-4">
-      <img
-        :src="require('@/assets/img/user-pic-placeholder.jpg')"
-        alt=""
-        class="user-pic"
-      />
-      <p class="user-name mr-auto">hardwarecanucks</p>
+      <img :src="postOwnerProfilePhoto" alt="" class="user-pic" />
+      <p class="user-name mr-auto">{{ post.owner.user_name }}</p>
       <fa-icon icon="ellipsis-h"></fa-icon>
     </div>
-    <img
-      :src="require('@/assets/img/user-post-sample.jpg')"
-      alt=""
-      class="post-image"
-    />
+    <img :src="postImage" alt="" class="post-image" v-if="postImage" />
     <div class="post-actions pa-4">
       <div class="section-left">
         <fa-icon :icon="['far', 'heart']" class="fa-lg fa-fw mr-3"></fa-icon>
@@ -25,19 +17,23 @@
         class="fa-lg fa-fw mr-3 bookmark"
       ></fa-icon>
     </div>
-    <div class="post-details px-4 py-2">
+    <div class="post-details px-4 py-2 mb-3">
       <p class="mb-2"><b>527 Likes</b></p>
       <p class="mb-2">
-        <b><router-link to="/">hardwarecanucks</router-link></b> Not sure how
-        you feel about this but Razer just dropped the new Viper 8K with
-        insanely fast polling rate of 8000Hz. Can you feel it in games though? I
-        couldn’t... but the tech is still cool! Video is up on the channel 😎
+        <b
+          ><router-link :to="`/${post.owner.user_name}`">{{
+            post.owner.user_name
+          }}</router-link></b
+        >
+        {{ post.caption }}
       </p>
       <p><small>1 HOUR AGO</small></p>
     </div>
 
     <div class="post-footer">
-      <fa-icon :icon="['far', 'smile']" class="fa-lg ic-smile"></fa-icon>
+      <span class="ic-smile">
+        <fa-icon :icon="['far', 'smile']" class="fa-lg"></fa-icon>
+      </span>
       <textarea
         rows="1"
         placeholder="Add a comment..."
@@ -49,10 +45,36 @@
 </template>
 
 <script lang="ts">
+import { Post } from '@/vendor/firebase/db/models'
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
+import firebase from '@/vendor/firebase'
 
 @Component({})
-export default class UserPost extends Vue {}
+export default class UserPost extends Vue {
+  @Prop(Object) readonly post!: Post
+
+  postOwnerProfilePhoto = '/user-profile-photo-placeholder.svg'
+  postImage = ''
+
+  mounted() {
+    getUserProfilePhotoFromStorage(false, this.post.owner)
+      .then(url => {
+        this.postOwnerProfilePhoto = url
+      })
+      .catch(error => {
+        alert(error.message)
+      })
+
+    firebase
+      .storage()
+      .ref(`/post_images/${this.post.post_image}`)
+      .getDownloadURL()
+      .then(url => {
+        this.postImage = url
+      })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

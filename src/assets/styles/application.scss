@@ -26,4 +26,8 @@ body {
   padding: 0;
   font-family: $main-font;
   background-color: $page-bg;
+
+  &.modal-open {
+    overflow: hidden;
+  }
 }

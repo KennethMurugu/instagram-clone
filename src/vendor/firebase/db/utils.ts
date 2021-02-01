@@ -5,10 +5,18 @@ export function getUserAccountFromStorage() {
   return JSON.parse(sessionStorage.getItem('instagram-clone-user-account')!)
 }
 
-export function getUserProfilePhotoFromStorage() {
-  const userAccount: UserAccount = JSON.parse(
-    sessionStorage.getItem('instagram-clone-user-account')!
-  )
+export function getUserProfilePhotoFromStorage(
+  forCurrentUser = true,
+  anotherAccount: UserAccount = {}
+) {
+  let userAccount: UserAccount
+  if (forCurrentUser) {
+    userAccount = JSON.parse(
+      sessionStorage.getItem('instagram-clone-user-account')!
+    )
+  } else {
+    userAccount = anotherAccount
+  }
 
   return firebase
     .storage()

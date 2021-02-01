@@ -7,3 +7,10 @@ export interface UserAccount {
   bio?: string
   profile_photo?: string
 }
+
+export interface Post {
+  caption?: string
+  created_at?: number
+  owner?: UserAccount
+  post_image?: string
+}

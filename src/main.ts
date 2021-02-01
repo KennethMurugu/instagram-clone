@@ -16,8 +16,6 @@ Vue.use(VueFormulate)
 // Import application css
 import '@/assets/styles/application.scss'
 
-sessionStorage.setItem('instagram-clone-user-account', JSON.stringify({}))
-
 new Vue({
   router,
   store,
