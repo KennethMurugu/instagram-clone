@@ -9,16 +9,17 @@
 import TopNav from '@/components/TopNav.vue'
 import firebase from '@/vendor/firebase'
 import { Component, Vue } from 'vue-property-decorator'
+import { UserAccount } from './vendor/firebase/db/models'
+import { watchForUserAccountChanges } from '@/vendor/firebase/db/utils'
 
 @Component({
-  components: { TopNav },
+  components: { TopNav }
 })
 export default class App extends Vue {
-  currentUser() {
-    return firebase.auth().currentUser
+  mounted() {
+    watchForUserAccountChanges()
   }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

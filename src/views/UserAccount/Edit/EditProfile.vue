@@ -2,15 +2,17 @@
   <div class="edit-profile">
     <div class="row">
       <div class="section-left">
-        <img
-          :src="require('@/assets/img/user-pic-placeholder.jpg')"
-          alt=""
-          class="user-pic"
-        />
+        <img :src="userProfileUrl" alt="" class="user-pic" />
       </div>
       <div class="section-right">
         <h2 class="mb-1">{{ userAccount.user_name }}</h2>
-        <button class="btn">Change profile photo</button>
+        <!-- <button class="btn">Change profile photo</button> -->
+        <FormulateInput
+          type="image"
+          label="Change profile photo"
+          validation="mime:image/jpeg,image/jpg,image/png"
+          :uploader="userImgSelected"
+        />
       </div>
     </div>
 
@@ -100,51 +102,68 @@ import firebase from '@/vendor/firebase'
 
 @Component({})
 export default class EditProfile extends Vue {
-  userAccount: UserAccount = {}
+  userAccount: UserAccount = this.$store.state.userAccount
+  userProfileUrl = '/user-profile-photo-placeholder.svg'
 
   mounted() {
-    // Get username from uid (get from session)
-    const uid = sessionStorage.getItem('instagram-clone-uid')!
-    firebase
-      .database()
-      .ref(usernamesPath(uid))
-      .once('value')
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const username = snapshot.val()
-          return firebase
-            .database()
-            .ref(userAccountsPath(username))
-            .once('value')
-        } else {
-          throw new Error('No user with that uid found')
-        }
-      })
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          this.userAccount = snapshot.toJSON()!
-        } else {
-          throw new Error('No user with that username found')
-        }
-      })
-      .catch((error) => {
-        alert(error.message)
-        console.error(error)
-      })
+    this.getUserProfilePhotoFromStorage()
   }
 
   updateUserAccountDetails() {
     firebase
       .database()
-      .ref(userAccountsPath(this.userAccount.user_name!))
+      .ref(`/accounts/${this.userAccount.uid}`)
       .update(this.userAccount)
       .then(() => {
         alert('Profile updated successfully!')
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error)
         alert(error.message)
       })
+  }
+
+  userImgSelected(file: Blob, progress: (val: number) => void) {
+    progress(25)
+    // Upload to profile_photos/<user_id>
+    const profilePhotoRef = firebase
+      .storage()
+      .ref(`profile_photos/${this.userAccount.uid}`)
+    profilePhotoRef
+      .put(file)
+      .then(snapshot => {
+        progress(75)
+
+        // Update accounts/<user_name>/profile_photo
+        return firebase
+          .database()
+          .ref(`accounts/${this.userAccount.uid}`)
+          .update({ profile_photo: this.userAccount.uid })
+      })
+      .then(() => {
+        progress(100)
+        alert('Profile photo uploaded successfully')
+        this.getUserProfilePhotoFromStorage()
+      })
+      .catch(error => {
+        alert('Error uploading profile photo: ' + error.message)
+      })
+  }
+
+  getUserProfilePhotoFromStorage() {
+    if (this.userAccount.profile_photo) {
+      firebase
+        .storage()
+        .ref(`/profile_photos/${this.userAccount.profile_photo}`)
+        .getDownloadURL()
+        .then(url => {
+          this.userProfileUrl = url
+        })
+        .catch(error => {
+          console.error(error)
+          alert('Could not get user profile url: ' + error.message)
+        })
+    }
   }
 }
 </script>
@@ -173,5 +192,9 @@ export default class EditProfile extends Vue {
   border-radius: 3px;
   font-size: 1.2rem;
   width: 100%;
+}
+
+textarea {
+  resize: vertical;
 }
 </style>

@@ -124,8 +124,22 @@
 
   &[data-classification='file'] {
     .formulate-input-upload-area {
+      padding: 1.5rem 0;
+      width: 80%;
       input {
         // The actual upload element
+        &:hover {
+          // background-color: red !important;
+
+          & ~ .formulate-input-upload-area-mask::before {
+            background-color: #fff;
+          }
+        }
+      }
+      .formulate-input-upload-area-mask {
+        background-color: transparentize($btn-bg, 0.4);
+        color: #fff;
+        border: none;
       }
     }
   }

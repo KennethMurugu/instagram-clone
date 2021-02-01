@@ -46,6 +46,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import router from '@/router'
+import { watchForUserAccountChanges } from '@/vendor/firebase/db/utils'
 
 @Component
 export default class Login extends Vue {
@@ -57,7 +58,7 @@ export default class Login extends Vue {
       label: 'Email:',
       placeholder: 'Email',
       validationName: 'Email',
-      validation: 'required',
+      validation: 'required'
     },
 
     {
@@ -67,8 +68,8 @@ export default class Login extends Vue {
       label: 'Password:',
       placeholder: 'Password',
       validationName: 'Password',
-      validation: 'required',
-    },
+      validation: 'required'
+    }
   ]
   loginForm = {}
   isWorking = false
@@ -84,12 +85,14 @@ export default class Login extends Vue {
     firebase
       .auth()
       .signInWithEmailAndPassword(form.email, form.password)
-      .then((userCredentials) => {
+      .then(userCredentials => {
         const email = userCredentials.user?.email
         alert(`Login successful as ${email}`)
+
+        watchForUserAccountChanges()
         router.push('/')
       })
-      .catch((error) => {
+      .catch(error => {
         var errorCode = error.code
         var errorMessage = error.message
         console.error(error)

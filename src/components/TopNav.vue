@@ -18,7 +18,7 @@
         <img :src="require('@/assets/img/compass.svg')" alt="" class="icon" />
         <img :src="require('@/assets/img/heart.svg')" alt="" class="icon" />
         <img
-          :src="require('@/assets/img/user-pic-placeholder.jpg')"
+          :src="userProfileUrl"
           alt=""
           class="user-pic"
           :class="{ 'dropdown-open': showProfileDropdown }"
@@ -71,37 +71,35 @@ import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import { UserAccount } from '@/vendor/firebase/db/models'
 import { usernamesPath } from '@/vendor/firebase/db/refs'
+import {
+  disableUserAccountChangesCallback,
+  getUserAccountFromStorage
+} from '@/vendor/firebase/db/utils'
 
 @Component({})
 export default class TopNav extends Vue {
   showProfileDropdown = false
-  userAccount: UserAccount = {
-    user_name: '',
-  }
+  userAccount: UserAccount = this.$store.state.userAccount
+  userProfileUrl = '/user-profile-photo-placeholder.svg'
 
   mounted() {
-    this.getUserAccount()
+    this.getUserProfilePhotoFromStorage()
   }
 
-  getUserAccount() {
-    const currentUserID = sessionStorage.getItem('instagram-clone-uid')!
-
-    firebase
-      .database()
-      .ref(usernamesPath(currentUserID))
-      .once('value')
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          console.log(snapshot.val())
-          const user_name = snapshot.val()
-          this.userAccount.user_name = user_name
-        } else {
-          throw new Error('No username data found')
-        }
-      })
-      .catch((error) => {
-        alert('Something went wrong: ' + error.message)
-      })
+  getUserProfilePhotoFromStorage() {
+    if (this.userAccount.profile_photo) {
+      firebase
+        .storage()
+        .ref(`/profile_photos/${this.userAccount.profile_photo}`)
+        .getDownloadURL()
+        .then(url => {
+          this.userProfileUrl = url
+        })
+        .catch(error => {
+          console.error(error)
+          alert('Could not get user profile url: ' + error.message)
+        })
+    }
   }
 
   logoutUser() {
@@ -113,8 +111,10 @@ export default class TopNav extends Vue {
         // Clear session data
         sessionStorage.removeItem('instagram-clone-uid')
         this.$router.push('/login')
+
+        disableUserAccountChangesCallback()
       })
-      .catch((error) => {
+      .catch(error => {
         alert('Somethig went wrong: ' + error.message)
       })
   }
@@ -206,6 +206,7 @@ export default class TopNav extends Vue {
   opacity: 0;
   pointer-events: none;
   transition: all 0.2s ease;
+  overflow-y: hidden;
 
   &.show {
     transform: translateY(0px);

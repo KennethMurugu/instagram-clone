@@ -95,30 +95,32 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import { UserAccount } from '@/vendor/firebase/db/models'
 import { userAccountsPath } from '@/vendor/firebase/db/refs'
+import { getUserAccountFromStorage } from '@/vendor/firebase/db/utils'
 
 @Component({})
 export default class UserAccountBase extends Vue {
   @Prop(String) readonly user_name!: string
   currentUserName = ''
-  userAccount: UserAccount = {}
+  userAccount: UserAccount = this.$store.state.userAccount
   activeTab = 0
 
   mounted() {
     this.$store.commit('toggleTopNav', true)
 
     // Get user details
-    firebase
-      .database()
-      .ref(userAccountsPath(this.user_name))
-      .once('value')
-      .then((snapshot) => {
-        console.log(snapshot.toJSON())
-        const obj = snapshot.toJSON()
-        if (obj) this.userAccount = obj
-      })
-      .catch((error) => {
-        alert(error.message)
-      })
+    //   firebase
+    //     .database()
+    //     .ref(userAccountsPath(this.user_name))
+    //     .once('value')
+    //     .then(snapshot => {
+    //       console.log(snapshot.toJSON())
+    //       const obj = snapshot.toJSON()
+    //       if (obj) this.userAccount = obj
+    //     })
+    //     .catch(error => {
+    //       alert(error.message)
+    //     })
+    // }
   }
 }
 </script>

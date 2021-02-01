@@ -5,4 +5,5 @@ export interface UserAccount {
   uid?: string
   user_name?: string
   bio?: string
+  profile_photo?: string
 }
