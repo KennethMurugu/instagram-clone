@@ -1,7 +1,7 @@
 import firebase from '@/vendor/firebase'
 import { UserAccount } from './models'
 
-export function getUserAccountFromStorage() {
+export function getUserAccountFromStorage():UserAccount {
   return JSON.parse(sessionStorage.getItem('instagram-clone-user-account')!)
 }
 

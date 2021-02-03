@@ -9,8 +9,14 @@ export interface UserAccount {
 }
 
 export interface Post {
+  id: string
   caption?: string
   created_at?: number
-  owner?: UserAccount
+  owner: UserAccount
   post_image?: string
+}
+
+export interface PostComment {
+  owner: UserAccount
+  text: string
 }

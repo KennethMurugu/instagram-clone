@@ -20,7 +20,7 @@ import { watchForUserAccountChanges } from '@/vendor/firebase/db/utils'
 import NewPost from '@/views/NewPost.vue'
 
 @Component({
-  components: { TopNav, NewPost }
+  components: { TopNav, NewPost },
 })
 export default class App extends Vue {
   mounted() {

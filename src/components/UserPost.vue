@@ -27,6 +27,19 @@
         >
         {{ post.caption }}
       </p>
+
+      <p class="post-comments-total mb-2" v-if="postCommentsTotal > 0">
+        View all {{ postCommentsTotal }} comments
+      </p>
+      <p class="mb-2 post-comment" v-if="postCommentsTotal > 0">
+        <a
+          :href="`/${mostRecentComment.owner.user_name}`"
+          class="mr-1 post-comment-username"
+          >{{ mostRecentComment.owner.user_name }}</a
+        >
+        <span class="post-comment-text">{{ mostRecentComment.text }}</span>
+      </p>
+
       <p><small>1 HOUR AGO</small></p>
     </div>
 
@@ -38,16 +51,26 @@
         rows="1"
         placeholder="Add a comment..."
         class="comment-input py-6"
+        v-model="newPostComment.text"
       ></textarea>
-      <button class="btn btn-submit-comment">Post</button>
+      <button
+        class="btn btn-submit-comment"
+        @click="postComment"
+        :disabled="!newPostComment.text"
+      >
+        Post
+      </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Post } from '@/vendor/firebase/db/models'
+import { PostComment, Post } from '@/vendor/firebase/db/models'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
+import {
+  getUserAccountFromStorage,
+  getUserProfilePhotoFromStorage,
+} from '@/vendor/firebase/db/utils'
 import firebase from '@/vendor/firebase'
 
 @Component({})
@@ -57,12 +80,36 @@ export default class UserPost extends Vue {
   postOwnerProfilePhoto = '/user-profile-photo-placeholder.svg'
   postImage = ''
 
+  newPostComment: PostComment = {
+    owner: {},
+    text: '',
+  }
+  postComments: { [key: string]: PostComment } = {}
+
+  get mostRecentComment() {
+    return Object.values(this.postComments)[0]
+  }
+
+  get postCommentsTotal() {
+    return Object.keys(this.postComments).length
+  }
+
+  get postCommentsAsArray() {
+    return Object.values(this.postComments)
+  }
+
   mounted() {
+    this.loadPostImages()
+
+    this.loadPostComments()
+  }
+
+  loadPostImages() {
     getUserProfilePhotoFromStorage(false, this.post.owner)
-      .then(url => {
+      .then((url) => {
         this.postOwnerProfilePhoto = url
       })
-      .catch(error => {
+      .catch((error) => {
         alert(error.message)
       })
 
@@ -70,8 +117,40 @@ export default class UserPost extends Vue {
       .storage()
       .ref(`/post_images/${this.post.post_image}`)
       .getDownloadURL()
-      .then(url => {
+      .then((url) => {
         this.postImage = url
+      })
+  }
+
+  loadPostComments() {
+    firebase
+      .database()
+      .ref(`comments/${this.post.id}`)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          this.postComments = snapshot.val()
+        }
+      })
+      .catch((error) => {
+        alert(error.message)
+        console.error(error)
+      })
+  }
+
+  postComment() {
+    this.newPostComment.owner = getUserAccountFromStorage()
+
+    firebase
+      .database()
+      .ref(`/comments/${this.post.id}`)
+      .push(this.newPostComment)
+      .then((ref) => {
+        alert('Comment posted successfully')
+      })
+      .catch((error) => {
+        alert(error.message)
+        console.error(error)
       })
   }
 }
@@ -145,6 +224,11 @@ export default class UserPost extends Vue {
     align-self: center;
     background-color: transparent;
     color: $btn-bg;
+
+    &:disabled {
+      color: gray;
+      cursor: not-allowed;
+    }
   }
 }
 </style>

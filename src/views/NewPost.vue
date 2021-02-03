@@ -53,7 +53,7 @@ export default class NewPost extends Vue {
   postImage: any = ''
   newPostDetails = {
     caption: '',
-    created_at: Date.now()
+    created_at: Date.now(),
   }
   userAccount: UserAccount = this.$store.state.userAccount
   isWorking = false
@@ -65,7 +65,7 @@ export default class NewPost extends Vue {
     //@ts-ignore
     const imgEl: Element = this.$refs['post-img']
     const reader = new FileReader()
-    reader.onload = function(e) {
+    reader.onload = function (e) {
       //@ts-ignore
       imgEl.setAttribute('src', e.target!.result)
     }
@@ -81,7 +81,7 @@ export default class NewPost extends Vue {
 
     const post = {
       caption: this.newPostDetails.caption,
-      created_at: this.newPostDetails.created_at
+      created_at: this.newPostDetails.created_at,
     }
 
     // Create post in database:posts
@@ -89,7 +89,7 @@ export default class NewPost extends Vue {
       .database()
       .ref('/posts')
       .push({ ...post, owner: this.userAccount })
-      .then(ref => {
+      .then((ref) => {
         postId = ref.key!
         // Upload post image to storage:post_images/<post_id>
         return firebase
@@ -97,17 +97,17 @@ export default class NewPost extends Vue {
           .ref(`/post_images/${postId}`)
           .put(this.postImage)
       })
-      .then(snapshot => {
-        // Update post in database with post id database:posts/<post_id> {post_image}
+      .then((snapshot) => {
+        // Update post in database with post id database:posts/<post_id> {id, post_image}
         return firebase
           .database()
           .ref(`posts/${postId}`)
-          .update({ post_image: postId })
+          .update({ id: postId, post_image: postId })
       })
       .then(() => {
         alert('Post created successfully')
       })
-      .catch(error => {
+      .catch((error) => {
         alert(error.message)
       })
       .finally(() => {

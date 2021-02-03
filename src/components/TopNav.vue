@@ -82,7 +82,7 @@ import { UserAccount } from '@/vendor/firebase/db/models'
 import { usernamesPath } from '@/vendor/firebase/db/refs'
 import {
   disableUserAccountChangesCallback,
-  getUserProfilePhotoFromStorage
+  getUserProfilePhotoFromStorage,
 } from '@/vendor/firebase/db/utils'
 
 @Component({})
@@ -94,10 +94,10 @@ export default class TopNav extends Vue {
   @Watch('userProfileUrl')
   onChildChanged(val: string, oldVal: string) {
     getUserProfilePhotoFromStorage()
-      .then(url => {
+      .then((url) => {
         this.userProfileUrl = url
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error)
         // alert('Could not get user profile photo: ' + error.message)
       })
@@ -105,10 +105,10 @@ export default class TopNav extends Vue {
 
   mounted() {
     getUserProfilePhotoFromStorage()
-      .then(url => {
+      .then((url) => {
         this.userProfileUrl = url
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error)
         // alert('Could not get user profile photo: ' + error.message)
       })
@@ -126,7 +126,7 @@ export default class TopNav extends Vue {
 
         disableUserAccountChangesCallback()
       })
-      .catch(error => {
+      .catch((error) => {
         alert('Somethig went wrong: ' + error.message)
       })
   }
@@ -143,6 +143,7 @@ export default class TopNav extends Vue {
   align-items: center;
   position: sticky;
   top: 0;
+  z-index: 999;
 }
 
 .nav-content {
