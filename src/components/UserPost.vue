@@ -5,7 +5,14 @@
       <p class="user-name mr-auto">{{ post.owner.user_name }}</p>
       <fa-icon icon="ellipsis-h"></fa-icon>
     </div>
-    <img :src="postImage" alt="" class="post-image" v-if="postImage" />
+    <div class="post-image-container" @dblclick="togglePostLike">
+      <img :src="postImage" alt="" class="post-image" v-if="postImage" />
+      <fa-icon
+        icon="heart"
+        class="heart"
+        :class="{ show: showPostLikeHeart }"
+      ></fa-icon>
+    </div>
     <div class="post-actions pa-4">
       <div class="section-left">
         <fa-icon
@@ -93,6 +100,7 @@ export default class UserPost extends Vue {
   postOwnerProfilePhoto = '/user-profile-photo-placeholder.svg'
   postImage = ''
   isPostLikedByUser = false
+  showPostLikeHeart = false
 
   newPostComment: PostComment = {
     owner: {},
@@ -195,6 +203,15 @@ export default class UserPost extends Vue {
       })
   }
 
+  // doubleTapTolike() {
+  //   if (!this.isPostLikedByUser) {
+  //     this.showPostLikeHeart = true
+  //     setTimeout(() => {
+  //       this.showPostLikeHeart = false
+  //     }, 1000)
+  //   }
+  // }
+
   togglePostLike() {
     const currentUser = firebase.auth().currentUser
     let promise: Promise<any>
@@ -205,7 +222,7 @@ export default class UserPost extends Vue {
         .ref(`user_post_likes/${currentUser?.uid}`)
         .update({ [this.post.id]: true })
         .then(() => {
-          // increase post like count
+          // Increase post like count
           return firebase
             .database()
             .ref(`posts/${this.post.id}/likes`)
@@ -213,6 +230,12 @@ export default class UserPost extends Vue {
               return currentLikes + 1
             })
         })
+
+      // Show heart icon
+      this.showPostLikeHeart = true
+      setTimeout(() => {
+        this.showPostLikeHeart = false
+      }, 1000)
     } else {
       promise = firebase
         .database()
@@ -264,6 +287,45 @@ export default class UserPost extends Vue {
 
   .user-name {
     font-weight: bold;
+  }
+}
+
+.post-image-container {
+  position: relative;
+  .heart {
+    position: absolute;
+    color: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 6rem;
+    opacity: 0;
+    filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.356));
+    visibility: hidden;
+
+    &.show {
+      visibility: visible;
+      animation: heartShow 1.5s cubic-bezier(0.81, -0.5, 0.38, 1.6) forwards;
+    }
+  }
+
+  @keyframes heartShow {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+    50% {
+      opacity: 0.75;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    70% {
+      opacity: 0.75;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
   }
 }
 

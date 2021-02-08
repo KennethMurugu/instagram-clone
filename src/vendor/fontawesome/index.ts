@@ -19,6 +19,7 @@ import {
   faUserTag,
   faEllipsisH,
   faTimes,
+  faHeart as faHeartSolid
 } from '@fortawesome/free-solid-svg-icons'
 
 //Regular
@@ -45,6 +46,7 @@ library.add(
   faUserTag,
   faEllipsisH,
   faTimes,
+  faHeartSolid,
   // Regular
   faUser,
   faBookmark,
