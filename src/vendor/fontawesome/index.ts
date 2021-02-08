@@ -18,7 +18,7 @@ import {
   faTv,
   faUserTag,
   faEllipsisH,
-  faTimes
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons'
 
 //Regular

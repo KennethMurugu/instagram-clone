@@ -8,17 +8,30 @@
     <img :src="postImage" alt="" class="post-image" v-if="postImage" />
     <div class="post-actions pa-4">
       <div class="section-left">
-        <fa-icon :icon="['far', 'heart']" class="fa-lg fa-fw mr-3"></fa-icon>
-        <fa-icon :icon="['far', 'comment']" class="fa-lg fa-fw mr-3"></fa-icon>
-        <fa-icon :icon="['far', 'paper-plane']" class="fa-lg fa-fw"></fa-icon>
+        <fa-icon
+          :icon="['far', 'heart']"
+          class="fa-lg fa-fw mr-3 action like"
+          :class="{ 'is-liked-by-user': isPostLikedByUser }"
+          @click="togglePostLike"
+        ></fa-icon>
+        <fa-icon
+          :icon="['far', 'comment']"
+          class="fa-lg fa-fw mr-3 action"
+        ></fa-icon>
+        <fa-icon
+          :icon="['far', 'paper-plane']"
+          class="fa-lg fa-fw action"
+        ></fa-icon>
       </div>
       <fa-icon
         :icon="['far', 'bookmark']"
-        class="fa-lg fa-fw mr-3 bookmark"
+        class="fa-lg fa-fw mr-3 bookmark action"
       ></fa-icon>
     </div>
     <div class="post-details px-4 py-2 mb-3">
-      <p class="mb-2"><b>527 Likes</b></p>
+      <p class="mb-2">
+        <b>{{ post.likes }} likes</b>
+      </p>
       <p class="mb-2">
         <b
           ><router-link :to="`/${post.owner.user_name}`">{{
@@ -79,6 +92,7 @@ export default class UserPost extends Vue {
 
   postOwnerProfilePhoto = '/user-profile-photo-placeholder.svg'
   postImage = ''
+  isPostLikedByUser = false
 
   newPostComment: PostComment = {
     owner: {},
@@ -102,6 +116,33 @@ export default class UserPost extends Vue {
     this.loadPostImages()
 
     this.loadPostComments()
+
+    this.checkIfPostLikedByUser()
+  }
+
+  // reloadPost(){
+  //   firebase.database().ref(`posts/${this.post.id}`)
+  //   .get()
+  //   .then(snapshot=>{
+  //     if(snapshot.exists()){
+  //       this.pst
+  //     }
+  //   })
+  // }
+
+  checkIfPostLikedByUser() {
+    const currentUser = firebase.auth().currentUser
+    firebase
+      .database()
+      .ref(`user_post_likes/${currentUser?.uid}/${this.post.id}`)
+      .get()
+      .then((snapshot) => {
+        this.isPostLikedByUser = snapshot.exists()
+      })
+      .catch((error) => {
+        alert('[checkIfPostLikedByUser] ' + error.message)
+        console.error(error)
+      })
   }
 
   loadPostImages() {
@@ -153,6 +194,53 @@ export default class UserPost extends Vue {
         console.error(error)
       })
   }
+
+  togglePostLike() {
+    const currentUser = firebase.auth().currentUser
+    let promise: Promise<any>
+
+    if (!this.isPostLikedByUser) {
+      promise = firebase
+        .database()
+        .ref(`user_post_likes/${currentUser?.uid}`)
+        .update({ [this.post.id]: true })
+        .then(() => {
+          // increase post like count
+          return firebase
+            .database()
+            .ref(`posts/${this.post.id}/likes`)
+            .transaction((currentLikes) => {
+              return currentLikes + 1
+            })
+        })
+    } else {
+      promise = firebase
+        .database()
+        .ref(`user_post_likes/${currentUser?.uid}/${this.post.id}`)
+        .remove()
+        .then(() => {
+          // Reduce post like count
+          return firebase
+            .database()
+            .ref(`posts/${this.post.id}/likes`)
+            .transaction((currentLikes) => {
+              return currentLikes - 1
+            })
+        })
+    }
+
+    promise
+      .then(() => {
+        alert('[togglePostLike] Success')
+      })
+      .catch((error) => {
+        console.error(error)
+        alert('[togglePostLike] ' + error.message)
+      })
+      .finally(() => {
+        this.checkIfPostLikedByUser()
+      })
+  }
 }
 </script>
 
@@ -191,6 +279,14 @@ export default class UserPost extends Vue {
   justify-content: space-between;
   .bookmark {
     justify-self: end;
+  }
+
+  .action {
+    cursor: pointer;
+
+    &.like.is-liked-by-user {
+      color: red;
+    }
   }
 }
 

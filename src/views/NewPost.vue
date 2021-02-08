@@ -54,6 +54,7 @@ export default class NewPost extends Vue {
   newPostDetails = {
     caption: '',
     created_at: Date.now(),
+    likes: 0,
   }
   userAccount: UserAccount = this.$store.state.userAccount
   isWorking = false

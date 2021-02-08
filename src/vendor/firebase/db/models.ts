@@ -14,6 +14,7 @@ export interface Post {
   created_at?: number
   owner: UserAccount
   post_image?: string
+  likes?: number
 }
 
 export interface PostComment {
