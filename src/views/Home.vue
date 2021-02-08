@@ -32,7 +32,7 @@ import { Post } from '@/vendor/firebase/db/models'
 import firebase from '@/vendor/firebase'
 
 @Component({
-  components: { Reels, UserPost }
+  components: { Reels, UserPost },
 })
 export default class Home extends Vue {
   allPosts: { [key: string]: Post } = {}
@@ -45,7 +45,7 @@ export default class Home extends Vue {
       .database()
       .ref('/posts')
       .get()
-      .then(snapshot => {
+      .then((snapshot) => {
         if (snapshot.exists()) {
           // @ts-ignore
           this.allPosts = snapshot.toJSON()
@@ -53,7 +53,7 @@ export default class Home extends Vue {
           // console.log(snapshot.toJSON())
         }
       })
-      .catch(error => {
+      .catch((error) => {
         alert(error.message)
       })
   }

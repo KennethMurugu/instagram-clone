@@ -10,6 +10,10 @@
     </div>
 
     <NewPost v-if="$store.state.showNewPostModal" />
+
+    <!-- <div class="post-overlay"> -->
+    <router-view name="post-overlay"> </router-view>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -17,10 +21,11 @@
 import TopNav from '@/components/TopNav.vue'
 import { Component, Vue } from 'vue-property-decorator'
 import { watchForUserAccountChanges } from '@/vendor/firebase/db/utils'
-import NewPost from '@/views/NewPost.vue'
+import NewPost from '@/views/posts/NewPost.vue'
+import UserPostFullscreen from '@/views/posts/UserPostFullScreen.vue'
 
 @Component({
-  components: { TopNav, NewPost },
+  components: { TopNav, NewPost, UserPostFullscreen },
 })
 export default class App extends Vue {
   mounted() {
@@ -32,6 +37,10 @@ export default class App extends Vue {
 <style lang="scss" scoped>
 #app {
   position: relative;
+
+  &.no-overflow {
+    overflow: hidden;
+  }
 }
 .btn-upload-image {
   width: 55px;
@@ -47,5 +56,8 @@ export default class App extends Vue {
   place-items: center;
   border: 1px solid mix(#000, $page-bg, 20%);
   cursor: pointer;
+}
+
+.post-overlay {
 }
 </style>

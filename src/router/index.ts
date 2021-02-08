@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import Home from '../views/Home.vue'
 import auth from '@/router/auth'
 import user from '@/router/user'
 
@@ -10,7 +9,17 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    props: true,
+    component: () => import('@/views/Home.vue')
+  },
+  {
+    path: '/p/:post_id',
+    name: 'UserPostFullScreen',
+    props: true,
+    components: {
+      default: () => import('@/views/Home.vue'),
+      ['post-overlay']: () => import('@/views/posts/UserPostFullScreen.vue'),
+    }
   },
 
   // Auth

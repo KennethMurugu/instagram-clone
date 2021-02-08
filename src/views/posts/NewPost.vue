@@ -46,7 +46,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
-import { UserAccount } from '@/vendor/firebase/db/models'
+import { Post, UserAccount } from '@/vendor/firebase/db/models'
 
 @Component({})
 export default class NewPost extends Vue {
@@ -83,6 +83,7 @@ export default class NewPost extends Vue {
     const post = {
       caption: this.newPostDetails.caption,
       created_at: this.newPostDetails.created_at,
+      likes: 0,
     }
 
     // Create post in database:posts

@@ -2,7 +2,9 @@
   <div class="user-post">
     <div class="header pa-4">
       <img :src="postOwnerProfilePhoto" alt="" class="user-pic" />
-      <p class="user-name mr-auto">{{ post.owner.user_name }}</p>
+      <router-link :to="`/${post.owner.user_name}`" class="user-name mr-auto">{{
+        post.owner.user_name
+      }}</router-link>
       <fa-icon icon="ellipsis-h"></fa-icon>
     </div>
     <div class="post-image-container" @dblclick="togglePostLike">
@@ -48,16 +50,31 @@
         {{ post.caption }}
       </p>
 
-      <p class="post-comments-total mb-2" v-if="postCommentsTotal > 0">
-        View all {{ postCommentsTotal }} comments
+      <p class="mb-2 post-comments-total">
+        <router-link :to="`/p/${this.post.id}`" v-if="postCommentsTotal > 0">
+          View all {{ postCommentsTotal }} comments
+        </router-link>
       </p>
-      <p class="mb-2 post-comment" v-if="postCommentsTotal > 0">
+      <!-- <p class="mb-2 post-comment" v-if="postCommentsTotal > 0">
         <a
           :href="`/${mostRecentComment.owner.user_name}`"
           class="mr-1 post-comment-username"
           >{{ mostRecentComment.owner.user_name }}</a
         >
         <span class="post-comment-text">{{ mostRecentComment.text }}</span>
+      </p> -->
+
+      <p
+        class="mb-2 post-comment"
+        v-for="(comment, index) in postCommentsAsArray.slice(0, 2)"
+        :key="index"
+      >
+        <router-link
+          :to="`/${comment.owner.user_name}`"
+          class="mr-1 post-comment-username"
+          >{{ comment.owner.user_name }}</router-link
+        >
+        <span class="post-comment-text">{{ comment.text }}</span>
       </p>
 
       <p class="post-created-at">
@@ -111,6 +128,7 @@ export default class UserPost extends Vue {
   newPostComment: PostComment = {
     owner: {},
     text: '',
+    created_at: Date.now(),
   }
   postComments: { [key: string]: PostComment } = {}
 
@@ -273,7 +291,7 @@ export default class UserPost extends Vue {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    margin-right: 2rem;
+    margin-right: 1rem;
   }
 
   .user-name {
@@ -340,6 +358,13 @@ export default class UserPost extends Vue {
     &.like.is-liked-by-user {
       color: red;
     }
+  }
+}
+
+.post-comments-total a {
+  color: gray;
+  &:hover {
+    text-decoration: underline;
   }
 }
 
