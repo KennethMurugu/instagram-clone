@@ -60,7 +60,9 @@
         <span class="post-comment-text">{{ mostRecentComment.text }}</span>
       </p>
 
-      <p><small>1 HOUR AGO</small></p>
+      <p class="post-created-at">
+        <small>{{ postCreatedAt }}</small>
+      </p>
     </div>
 
     <div class="post-footer">
@@ -92,6 +94,10 @@ import {
   getUserProfilePhotoFromStorage,
 } from '@/vendor/firebase/db/utils'
 import firebase from '@/vendor/firebase'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
 
 @Component({})
 export default class UserPost extends Vue {
@@ -120,6 +126,10 @@ export default class UserPost extends Vue {
     return Object.values(this.postComments)
   }
 
+  get postCreatedAt() {
+    return dayjs(this.post.created_at).fromNow()
+  }
+
   mounted() {
     this.loadPostImages()
 
@@ -127,16 +137,6 @@ export default class UserPost extends Vue {
 
     this.checkIfPostLikedByUser()
   }
-
-  // reloadPost(){
-  //   firebase.database().ref(`posts/${this.post.id}`)
-  //   .get()
-  //   .then(snapshot=>{
-  //     if(snapshot.exists()){
-  //       this.pst
-  //     }
-  //   })
-  // }
 
   checkIfPostLikedByUser() {
     const currentUser = firebase.auth().currentUser
@@ -202,15 +202,6 @@ export default class UserPost extends Vue {
         console.error(error)
       })
   }
-
-  // doubleTapTolike() {
-  //   if (!this.isPostLikedByUser) {
-  //     this.showPostLikeHeart = true
-  //     setTimeout(() => {
-  //       this.showPostLikeHeart = false
-  //     }, 1000)
-  //   }
-  // }
 
   togglePostLike() {
     const currentUser = firebase.auth().currentUser
@@ -350,6 +341,10 @@ export default class UserPost extends Vue {
       color: red;
     }
   }
+}
+
+.post-created-at {
+  text-transform: uppercase;
 }
 
 .post-footer {
