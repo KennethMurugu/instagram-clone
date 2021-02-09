@@ -1,5 +1,8 @@
 <template>
-  <div class="home mx-auto pt-8">
+  <div class="loading-overlay pa-3" v-if="isLoading">
+    <fa-icon icon="spinner" :spin="true" class="fa-3x"></fa-icon>
+  </div>
+  <div class="home mx-auto pt-8" v-else>
     <Reels class="mb-6" />
 
     <div class="no-posts-msg" v-if="Object.keys(allPosts).length <= 0">
@@ -35,6 +38,7 @@ import firebase from '@/vendor/firebase'
   components: { Reels, UserPost },
 })
 export default class Home extends Vue {
+  isLoading = true
   allPosts: { [key: string]: Post } = {}
 
   mounted() {
@@ -56,11 +60,21 @@ export default class Home extends Vue {
       .catch((error) => {
         alert(error.message)
       })
+      .finally(() => {
+        this.isLoading = false
+      })
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.loading-overlay {
+  text-align: center;
+  height: 82vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .home {
   max-width: 614px;
 }
