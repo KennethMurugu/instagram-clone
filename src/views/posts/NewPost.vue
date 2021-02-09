@@ -80,19 +80,23 @@ export default class NewPost extends Vue {
     let postId = ''
     this.isWorking = true
 
-    const post = {
+    const post: Post = {
+      id: '',
       caption: this.newPostDetails.caption,
       created_at: this.newPostDetails.created_at,
       likes: 0,
+      owner: this.userAccount,
     }
 
     // Create post in database:posts
     firebase
       .database()
       .ref('/posts')
-      .push({ ...post, owner: this.userAccount })
+      .push(post)
       .then((ref) => {
         postId = ref.key!
+        post.id = postId
+        post.post_image = postId
         // Upload post image to storage:post_images/<post_id>
         return firebase
           .storage()
@@ -105,6 +109,13 @@ export default class NewPost extends Vue {
           .database()
           .ref(`posts/${postId}`)
           .update({ id: postId, post_image: postId })
+      })
+      .then(() => {
+        // Add to storage:user_posts/<user_id>
+        return firebase
+          .database()
+          .ref(`user_posts/${this.userAccount.uid}`)
+          .push(post)
       })
       .then(() => {
         alert('Post created successfully')
@@ -137,8 +148,7 @@ export default class NewPost extends Vue {
   max-height: 90vh;
   border-radius: 3px;
   overflow-y: auto;
-  animation: modalBodyEnter-data-v-06070d16 0.5s
-    cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+  animation: modalBodyEnter 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
 }
 
 .modal-header {
@@ -170,7 +180,7 @@ export default class NewPost extends Vue {
 
 @keyframes modalBodyEnter {
   from {
-    transform: scale(0.5);
+    transform: scale(1.5);
     opacity: 0;
   }
   to {

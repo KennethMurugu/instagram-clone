@@ -1,5 +1,8 @@
 <template>
-  <div class="user-account pb-12">
+  <div class="loading-overlay pa-3" v-if="isLoading">
+    <fa-icon icon="spinner" :spin="true" class="fa-3x"></fa-icon>
+  </div>
+  <div class="user-account pb-12" v-else>
     <div class="user-details-container pt-10">
       <img :src="userProfileUrl" alt="" class="user-pic" />
 
@@ -44,7 +47,7 @@
     </div>
 
     <div class="page-content">
-      <div class="tabs mb-12">
+      <div class="tabs mb-0">
         <router-link
           :to="`/${userAccount.user_name}`"
           class="tab"
@@ -82,6 +85,8 @@
       <div class="content">
         <router-view></router-view>
       </div>
+
+      <router-view name="post-overlay"></router-view>
     </div>
   </div>
 </template>
@@ -98,22 +103,33 @@ export default class UserAccountBase extends Vue {
   userAccount: UserAccount = this.$store.state.userAccount
   activeTab = 0
   userProfileUrl = '/user-profile-photo-placeholder.svg'
+  isLoading = true
 
   mounted() {
     this.$store.commit('toggleTopNav', true)
 
     getUserProfilePhotoFromStorage()
-      .then(url => {
+      .then((url) => {
         this.userProfileUrl = url
       })
-      .catch(error => {
+      .catch((error) => {
         alert(error.message)
+      })
+      .finally(() => {
+        this.isLoading = false
       })
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.loading-overlay {
+  text-align: center;
+  height: 82vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .user-details-container {
   width: $max-content-width;
   display: grid;

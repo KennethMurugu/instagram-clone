@@ -45,7 +45,16 @@ const router: RouteConfig[] = [
         props: true,
         name: 'UserTagged',
         component: () => import('@/views/UserAccount/UserTagged.vue')
-      }
+      },
+      {
+        path: 'p/:post_id',
+        props: true,
+        name: 'UserPostFullScreen',
+        components: {
+          default: () => import('@/views/UserAccount/UserPosts.vue'),
+          ['post-overlay']: () => import('@/views/posts/UserPostFullScreen.vue')
+        }
+      },
     ]
   },
 ]
