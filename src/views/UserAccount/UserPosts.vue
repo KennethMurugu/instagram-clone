@@ -19,6 +19,7 @@
     <div class="posts-list" v-else>
       <UserPostImageOnly
         v-for="(post, index) in userPostsAsArray"
+        :key="index"
         :post="post"
       />
     </div>
@@ -67,7 +68,7 @@ export default class UserPosts extends Vue {
       })
   }
 
-  userPostClicked(post_id) {
+  userPostClicked(post_id: string) {
     // View post
     this.$router.push(`p/${post_id}`)
   }

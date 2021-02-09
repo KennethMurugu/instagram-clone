@@ -31,7 +31,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import Reels from '@/components/Reels.vue'
 import UserPost from '@/components/UserPost.vue'
-import { Post } from '@/vendor/firebase/db/models'
+import { Post, UserAccount } from '@/vendor/firebase/db/models'
 import firebase from '@/vendor/firebase'
 
 @Component({
@@ -41,7 +41,20 @@ export default class Home extends Vue {
   isLoading = true
   allPosts: { [key: string]: Post } = {}
 
+  get userAccount(): UserAccount {
+    return this.$store.state.userAccount
+  }
+
   mounted() {
+    // Check if user is logged in
+
+    if (this.userAccount == {}) {
+      // Not logged in
+      this.$router.push('/login')
+      return
+    }
+
+    // Show nav
     this.$store.commit('toggleTopNav', true)
 
     // Get posts

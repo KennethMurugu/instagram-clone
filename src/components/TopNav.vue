@@ -80,27 +80,27 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import { UserAccount } from '@/vendor/firebase/db/models'
 import { usernamesPath } from '@/vendor/firebase/db/refs'
-import {
-  disableUserAccountChangesCallback,
-  getUserProfilePhotoFromStorage,
-} from '@/vendor/firebase/db/utils'
+import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
 
 @Component({})
 export default class TopNav extends Vue {
   showProfileDropdown = false
-  userAccount: UserAccount = this.$store.state.userAccount
   userProfileUrl = '/user-profile-photo-placeholder.svg'
 
-  @Watch('userProfileUrl')
-  onChildChanged(val: string, oldVal: string) {
-    getUserProfilePhotoFromStorage()
-      .then((url) => {
-        this.userProfileUrl = url
-      })
-      .catch((error) => {
-        console.error(error)
-        // alert('Could not get user profile photo: ' + error.message)
-      })
+  // @Watch('userProfileUrl')
+  // onChildChanged(val: string, oldVal: string) {
+  //   getUserProfilePhotoFromStorage()
+  //     .then((url) => {
+  //       this.userProfileUrl = url
+  //     })
+  //     .catch((error) => {
+  //       console.error(error)
+  //       // alert('Could not get user profile photo: ' + error.message)
+  //     })
+  // }
+
+  get userAccount(): UserAccount {
+    return this.$store.state.userAccount
   }
 
   mounted() {
@@ -121,10 +121,8 @@ export default class TopNav extends Vue {
       .then(() => {
         alert('Log out  successful!')
         // Clear session data
-        sessionStorage.removeItem('instagram-clone-uid')
+        this.$store.commit('setUserAccount', {})
         this.$router.push('/login')
-
-        disableUserAccountChangesCallback()
       })
       .catch((error) => {
         alert('Somethig went wrong: ' + error.message)

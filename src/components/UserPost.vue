@@ -106,10 +106,7 @@
 <script lang="ts">
 import { PostComment, Post } from '@/vendor/firebase/db/models'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import {
-  getUserAccountFromStorage,
-  getUserProfilePhotoFromStorage,
-} from '@/vendor/firebase/db/utils'
+import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
 import firebase from '@/vendor/firebase'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -206,7 +203,7 @@ export default class UserPost extends Vue {
   }
 
   postComment() {
-    this.newPostComment.owner = getUserAccountFromStorage()
+    this.newPostComment.owner = this.$store.state.userAccount
 
     firebase
       .database()

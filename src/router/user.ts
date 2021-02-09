@@ -49,7 +49,7 @@ const router: RouteConfig[] = [
       {
         path: 'p/:post_id',
         props: true,
-        name: 'UserPostFullScreen',
+        name: 'UserAccountUserPostFullScreen',
         components: {
           default: () => import('@/views/UserAccount/UserPosts.vue'),
           ['post-overlay']: () => import('@/views/posts/UserPostFullScreen.vue')
