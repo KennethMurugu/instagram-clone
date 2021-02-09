@@ -35,12 +35,12 @@ const routes: Array<RouteConfig> = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })
 
-import firebase from '@/vendor/firebase'
+// import firebase from '@/vendor/firebase'
 // router.beforeEach((to, from, next) => {
 //   if (
 //     !firebase.auth().currentUser && // user not logged  in

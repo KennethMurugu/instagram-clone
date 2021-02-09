@@ -117,7 +117,8 @@ dayjs.extend(relativeTime)
 export default class UserPost extends Vue {
   @Prop(Object) readonly post!: Post
 
-  postOwnerProfilePhoto = '/user-profile-photo-placeholder.svg'
+  postOwnerProfilePhoto =
+    process.env.BASE_URL + '/user-profile-photo-placeholder.svg'
   postImage = ''
   isPostLikedByUser = false
   showPostLikeHeart = false

@@ -92,7 +92,8 @@ export default class UserPostFullScreen extends Vue {
     owner: {},
   }
 
-  postOwnerProfilePhoto = '/user-profile-photo-placeholder.svg'
+  postOwnerProfilePhoto =
+    process.env.BASE_URL + '/user-profile-photo-placeholder.svg'
   postImage = ''
   postComments: { [key: string]: PostComment } = {}
   newPostComment: PostComment = {

@@ -147,7 +147,8 @@ export default class SignUp extends Vue {
       user_name: form.user_name,
       password: form.password,
       bio: '',
-      profile_photo: '/user-profile-photo-placeholder.svg',
+      profile_photo:
+        process.env.BASE_URL + '/user-profile-photo-placeholder.svg',
     }
     // Check if username is unique
     this.checkIfUserNameExists(form.user_name)

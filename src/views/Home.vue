@@ -33,6 +33,7 @@ import Reels from '@/components/Reels.vue'
 import UserPost from '@/components/UserPost.vue'
 import { Post, UserAccount } from '@/vendor/firebase/db/models'
 import firebase from '@/vendor/firebase'
+import { isUserLoggedIn } from '@/store/utils'
 
 @Component({
   components: { Reels, UserPost },
@@ -45,10 +46,14 @@ export default class Home extends Vue {
     return this.$store.state.userAccount
   }
 
+  get isUserLoggedIn() {
+    return isUserLoggedIn(this)
+  }
+
   mounted() {
     // Check if user is logged in
 
-    if (this.userAccount == {}) {
+    if (this.userAccount.uid == null) {
       // Not logged in
       this.$router.push('/login')
       return

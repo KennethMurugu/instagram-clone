@@ -1,12 +1,11 @@
 <template>
   <div id="app">
-    <TopNav
-      v-if="$store.state.isTopNavShowing && $store.state.userAccount != null"
-    />
+    <TopNav v-if="$store.state.isTopNavShowing && isUserLoggedIn" />
     <router-view> </router-view>
     <div
       class="btn-upload-image"
       @click="$store.commit('toggleNewPostModal', true)"
+      v-if="isUserLoggedIn"
     >
       <fa-icon :icon="['fab', 'instagram']"></fa-icon>
     </div>
@@ -26,6 +25,7 @@ import NewPost from '@/views/posts/NewPost.vue'
 import UserPostFullscreen from '@/views/posts/UserPostFullScreen.vue'
 import firebase from '@/vendor/firebase'
 import { UserAccount } from '@/vendor/firebase/db/models'
+import { isUserLoggedIn } from '@/store/utils'
 
 @Component({
   components: { TopNav, NewPost, UserPostFullscreen },
@@ -33,6 +33,10 @@ import { UserAccount } from '@/vendor/firebase/db/models'
 export default class App extends Vue {
   get userAccount(): UserAccount {
     return this.$store.state.userAccount
+  }
+
+  get isUserLoggedIn() {
+    return isUserLoggedIn(this)
   }
 
   mounted() {

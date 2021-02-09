@@ -85,7 +85,7 @@ import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
 @Component({})
 export default class TopNav extends Vue {
   showProfileDropdown = false
-  userProfileUrl = '/user-profile-photo-placeholder.svg'
+  userProfileUrl = process.env.BASE_URL + '/user-profile-photo-placeholder.svg'
 
   // @Watch('userProfileUrl')
   // onChildChanged(val: string, oldVal: string) {

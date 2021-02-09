@@ -102,7 +102,7 @@ export default class UserAccountBase extends Vue {
   currentUserName = ''
 
   activeTab = 0
-  userProfileUrl = '/user-profile-photo-placeholder.svg'
+  userProfileUrl = process.env.BASE_URL + '/user-profile-photo-placeholder.svg'
   isLoading = true
 
   get userAccount(): UserAccount {

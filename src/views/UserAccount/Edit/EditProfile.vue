@@ -104,7 +104,7 @@ import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
 @Component({})
 export default class EditProfile extends Vue {
   userAccount: UserAccount = this.$store.state.userAccount
-  userProfileUrl = '/user-profile-photo-placeholder.svg'
+  userProfileUrl = process.env.BASE_URL + '/user-profile-photo-placeholder.svg'
 
   mounted() {
     this.getUserProfilePhotoFromStorage()
@@ -118,7 +118,7 @@ export default class EditProfile extends Vue {
       .then(() => {
         alert('Profile updated successfully!')
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error)
         alert(error.message)
       })
@@ -132,7 +132,7 @@ export default class EditProfile extends Vue {
       .ref(`profile_photos/${this.userAccount.uid}`)
     profilePhotoRef
       .put(file)
-      .then(snapshot => {
+      .then((snapshot) => {
         progress(75)
 
         // Update db:accounts/<user_name>/profile_photo
@@ -146,17 +146,17 @@ export default class EditProfile extends Vue {
         alert('Profile photo uploaded successfully')
         this.getUserProfilePhotoFromStorage()
       })
-      .catch(error => {
+      .catch((error) => {
         alert('Error uploading profile photo: ' + error.message)
       })
   }
 
   getUserProfilePhotoFromStorage() {
     getUserProfilePhotoFromStorage()
-      .then(url => {
+      .then((url) => {
         this.userProfileUrl = url
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error)
         // alert('Could not get user profile photo: ' + error.message)
       })
