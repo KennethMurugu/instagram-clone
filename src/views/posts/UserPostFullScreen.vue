@@ -11,17 +11,19 @@
       <div class="loading-overlay" v-if="isLoading">
         <fa-icon icon="spinner" :spin="true"></fa-icon>
       </div>
+
       <div class="post-image-container">
         <img :src="postImage" :alt="post.caption" class="post-image" />
       </div>
+
       <div class="post-content">
-        <div class="header px-4 py-5 mb-6">
+        <div class="header px-4 py-5">
           <img :src="postOwnerProfilePhoto" alt="" class="user-pic" />
           <p class="user-name mr-auto">{{ post.owner.user_name }}</p>
           <fa-icon icon="ellipsis-h"></fa-icon>
         </div>
 
-        <div class="comments-list px-4 mb-6">
+        <div class="comments-list px-4 pt-3">
           <div class="post-caption mb-6">
             <router-link :to="`/${post.owner.user_name}`" class="owner mb-1">{{
               post.owner.user_name
@@ -47,6 +49,25 @@
               {{ formatCreatedAt(comment.created_at) }}
             </p>
           </div>
+        </div>
+
+        <div class="post-footer">
+          <span class="ic-smile">
+            <fa-icon :icon="['far', 'smile']" class="fa-lg"></fa-icon>
+          </span>
+          <textarea
+            rows="1"
+            placeholder="Add a comment..."
+            class="comment-input py-6"
+            v-model="newPostComment.text"
+          ></textarea>
+          <button
+            class="btn btn-submit-comment"
+            @click="postComment"
+            :disabled="!newPostComment.text"
+          >
+            Post
+          </button>
         </div>
       </div>
     </div>
@@ -74,6 +95,11 @@ export default class UserPostFullScreen extends Vue {
   postOwnerProfilePhoto = '/user-profile-photo-placeholder.svg'
   postImage = ''
   postComments: { [key: string]: PostComment } = {}
+  newPostComment: PostComment = {
+    owner: {},
+    text: '',
+    created_at: Date.now(),
+  }
 
   get postCommentsAsArray() {
     return Object.values(this.postComments)
@@ -96,6 +122,7 @@ export default class UserPostFullScreen extends Vue {
   }
 
   loadPost() {
+    this.isLoading = true
     firebase
       .database()
       .ref(`/posts/${this.post_id}`)
@@ -151,10 +178,28 @@ export default class UserPostFullScreen extends Vue {
         console.error(error)
       })
   }
+
+  postComment() {
+    this.newPostComment.owner = this.$store.state.userAccount
+
+    firebase
+      .database()
+      .ref(`/comments/${this.post.id}`)
+      .push(this.newPostComment)
+      .then((ref) => {
+        alert('Comment posted successfully')
+        this.loadPost()
+      })
+      .catch((error) => {
+        alert(error.message)
+        console.error(error)
+      })
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+$post-body-height: 435px;
 .user-post-fullscreen {
   background-color: rgba(0, 0, 0, 0.7);
   width: 100%;
@@ -189,6 +234,7 @@ export default class UserPostFullScreen extends Vue {
   align-items: center;
   font-size: 3rem;
   color: mix(#000, #fff, 50%);
+  z-index: 2;
 }
 .post-body {
   position: relative;
@@ -207,6 +253,14 @@ export default class UserPostFullScreen extends Vue {
   .post-image {
     width: 100%;
   }
+}
+
+.post-content {
+  $header-height: 65px;
+  $footer-height: 60px;
+  $comments-list-height: $post-body-height - ($header-height + $footer-height);
+  display: grid;
+  grid-template-rows: $header-height $comments-list-height $footer-height;
 }
 
 .created-at {
@@ -231,7 +285,45 @@ export default class UserPostFullScreen extends Vue {
 }
 
 .comments-list {
-  height: 328px;
   overflow: auto;
+}
+
+.post-footer {
+  display: flex;
+  border-top: 1px solid mix(#000, $page-bg, 15%);
+  position: relative;
+
+  .ic-smile {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 1rem;
+  }
+
+  textarea {
+    width: calc(100% - 60px);
+    border: none;
+    resize: none;
+    padding-left: 4rem !important;
+    font-family: $main-font;
+    background-color: transparent;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .btn-submit-comment {
+    width: 60px;
+    align-self: center;
+    background-color: transparent;
+    color: $btn-bg;
+    font-weight: bold;
+
+    &:disabled {
+      color: gray;
+      cursor: not-allowed;
+    }
+  }
 }
 </style>

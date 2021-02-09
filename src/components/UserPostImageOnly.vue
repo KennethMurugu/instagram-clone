@@ -48,6 +48,7 @@ export default class UserPostImageOnly extends Vue {
   background-size: 100%;
   background-repeat: no-repeat;
   background-color: #000;
+  cursor: pointer;
 }
 .post-image {
   width: 100%;

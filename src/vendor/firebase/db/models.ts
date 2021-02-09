@@ -20,5 +20,5 @@ export interface Post {
 export interface PostComment {
   owner: UserAccount
   text: string
-  created_at?: number
+  created_at: number
 }

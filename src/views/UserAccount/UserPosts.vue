@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { Post, UserAccount } from '@/vendor/firebase/db/models'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import UserPostImageOnly from '@/components/UserPostImageOnly.vue'
 
@@ -38,14 +38,22 @@ import UserPostImageOnly from '@/components/UserPostImageOnly.vue'
 export default class UserPosts extends Vue {
   isLoading = true
   userPosts: { [key: string]: Post } = {}
-  userAccount: UserAccount = this.$store.state.userAccount
-
-  mounted() {
-    this.getUserPosts()
-  }
 
   get userPostsAsArray() {
     return Object.values(this.userPosts)
+  }
+
+  get userAccount(): UserAccount {
+    return this.$store.state.userAccount
+  }
+
+  @Watch('userAccount')
+  onChildChanged(val: string, oldVal: string) {
+    this.getUserPosts()
+  }
+
+  mounted() {
+    this.getUserPosts()
   }
 
   getUserPosts() {

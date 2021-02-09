@@ -100,10 +100,14 @@ import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
 export default class UserAccountBase extends Vue {
   @Prop(String) readonly user_name!: string
   currentUserName = ''
-  userAccount: UserAccount = this.$store.state.userAccount
+
   activeTab = 0
   userProfileUrl = '/user-profile-photo-placeholder.svg'
   isLoading = true
+
+  get userAccount(): UserAccount {
+    return this.$store.state.userAccount
+  }
 
   mounted() {
     this.$store.commit('toggleTopNav', true)
