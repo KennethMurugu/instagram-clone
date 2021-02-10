@@ -21,7 +21,8 @@ import {
   faTimes,
   faHeart as faHeartSolid,
   faCameraRetro,
-  faHome
+  faHome,
+  faChevronLeft
 } from '@fortawesome/free-solid-svg-icons'
 
 //Regular
@@ -53,7 +54,7 @@ library.add(
   faCameraRetro,
   faHome,
   faPlusSquare,
-  
+  faChevronLeft,
   // Regular
   faUser,
   faBookmark,

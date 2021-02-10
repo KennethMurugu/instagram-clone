@@ -1,19 +1,31 @@
 <template>
   <div class="user-post-fullscreen">
-    <div class="close-container mx-6 my-3">
+    <div class="close-container-desktop mx-6 my-3">
       <fa-icon
         icon="times"
         class="fa-2x close"
         @click="$router.go(-1)"
       ></fa-icon>
     </div>
-    <div class="post-body mx-auto my-3">
+    <div class="close-container-mobile pa-3">
+      <fa-icon
+        icon="chevron-left"
+        class="fa-2x close"
+        @click="$router.go(-1)"
+      ></fa-icon>
+      <p><b>Photo</b></p>
+      <span></span>
+    </div>
+    <div class="post-body mb-6">
       <div class="loading-overlay" v-if="isLoading">
         <fa-icon icon="spinner" :spin="true"></fa-icon>
       </div>
 
-      <div class="post-image-container">
-        <img :src="postImage" :alt="post.caption" class="post-image" />
+      <div
+        class="post-image-container"
+        :style="`background-image: url('${postImage}')`"
+      >
+        <!-- <img :src="postImage" :alt="post.caption" class="post-image" /> -->
       </div>
 
       <div class="post-content">
@@ -214,13 +226,17 @@ $post-body-height: 435px;
   overflow: auto;
 }
 
-.close-container {
+.close-container-desktop {
   // height: 80px;
   color: #fff;
   text-align: right;
   .close {
     cursor: pointer;
   }
+}
+
+.close-container-mobile {
+  display: none;
 }
 
 .loading-overlay {
@@ -241,12 +257,18 @@ $post-body-height: 435px;
   position: relative;
   background: #fff;
   width: $max-content-width;
+  margin-left: auto;
+  margin-right: auto;
   height: 435px;
   display: grid;
   grid-template-columns: 614px ($max-content-width - 614px);
 }
 
 .post-image-container {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  height: 435px;
   background-color: #000;
   display: flex;
   flex-direction: column;
@@ -325,6 +347,30 @@ $post-body-height: 435px;
       color: gray;
       cursor: not-allowed;
     }
+  }
+}
+
+@media screen and (max-width: $max-content-width) {
+  .user-post-fullscreen {
+    background-color: #fff;
+  }
+  .post-body {
+    grid-template-columns: auto;
+    height: auto;
+    margin: 0;
+    width: 100%;
+  }
+  .close-container-desktop {
+    display: none;
+  }
+
+  .close-container-mobile {
+    display: block;
+    color: #000;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 </style>
