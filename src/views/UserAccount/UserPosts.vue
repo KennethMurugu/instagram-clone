@@ -101,8 +101,14 @@ export default class UserPosts extends Vue {
 
 .posts-list {
   display: grid;
-  grid-template-columns: repeat(3, 300px);
-  // grid-template-rows: repeat(auto-fit, 300px);
-  gap: 1rem;
+  grid-template-columns: repeat(3, 32%);
+  gap: 2%;
+}
+
+@media screen and (max-width: 700px) {
+  .posts-list {
+    grid-template-columns: repeat(3, 33%);
+    gap: 0.5%;
+  }
 }
 </style>

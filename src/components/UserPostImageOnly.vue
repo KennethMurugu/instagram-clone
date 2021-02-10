@@ -42,15 +42,33 @@ export default class UserPostImageOnly extends Vue {
 
 <style lang="scss" scoped>
 .user-post-image-only {
-  //   width: 300px;
   height: 300px;
   background-position: center;
-  background-size: 100%;
+  background-size: cover;
   background-repeat: no-repeat;
   background-color: #000;
+
   cursor: pointer;
 }
 .post-image {
   width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .user-post-image-only {
+    height: 250px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .user-post-image-only {
+    height: 200px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .user-post-image-only {
+    height: 150px;
+  }
 }
 </style>

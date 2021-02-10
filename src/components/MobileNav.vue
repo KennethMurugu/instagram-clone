@@ -21,6 +21,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
+import { UserAccount } from '@/vendor/firebase/db/models'
 
 @Component({})
 export default class MobileNav extends Vue {
@@ -51,14 +52,13 @@ export default class MobileNav extends Vue {
   width: 100%;
   border-top: 1px solid rgb(219, 219, 219);
   display: none;
-  align-items: center;
-  grid-template-columns: repeat(5, 1fr);
 }
 
 .nav-link {
   text-align: center;
-  padding: 1rem;
+  padding: 1.5%;
   color: #000;
+  flex-grow: 1;
 }
 
 .user-pic {
@@ -67,7 +67,10 @@ export default class MobileNav extends Vue {
 
 @media screen and (max-width: 768px) {
   .mobile-nav {
-    display: grid;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 54px;
   }
 }
 </style>
