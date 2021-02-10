@@ -7,8 +7,9 @@
       @click="$store.commit('toggleNewPostModal', true)"
       v-if="isUserLoggedIn"
     >
-      <fa-icon :icon="['fab', 'instagram']"></fa-icon>
+      <fa-icon icon="camera-retro"></fa-icon>
     </div>
+    <MobileNav />
 
     <NewPost v-if="$store.state.showNewPostModal" />
 
@@ -20,6 +21,7 @@
 
 <script lang="ts">
 import TopNav from '@/components/TopNav.vue'
+import MobileNav from '@/components/MobileNav.vue'
 import { Component, Vue } from 'vue-property-decorator'
 import NewPost from '@/views/posts/NewPost.vue'
 import UserPostFullscreen from '@/views/posts/UserPostFullScreen.vue'
@@ -28,7 +30,7 @@ import { UserAccount } from '@/vendor/firebase/db/models'
 import { isUserLoggedIn } from '@/store/utils'
 
 @Component({
-  components: { TopNav, NewPost, UserPostFullscreen },
+  components: { TopNav, NewPost, UserPostFullscreen, MobileNav },
 })
 export default class App extends Vue {
   get userAccount(): UserAccount {
@@ -107,21 +109,25 @@ export default class App extends Vue {
   }
 }
 .btn-upload-image {
+  background-color: #fff;
   width: 55px;
   height: 55px;
-  // box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   position: fixed;
   bottom: 2rem;
   right: 2rem;
   border-radius: 50%;
   color: #000;
-  font-size: 2.5rem;
+  font-size: 2rem;
   display: grid;
   place-items: center;
-  border: 1px solid mix(#000, $page-bg, 20%);
+  // border: 1px solid mix(#000, $page-bg, 20%);
   cursor: pointer;
 }
 
-.post-overlay {
+@media screen and (max-width: 800px) {
+  .btn-upload-image {
+    display: none;
+  }
 }
 </style>

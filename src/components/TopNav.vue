@@ -72,6 +72,18 @@
       </div>
       <!-- <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>landing page, home, house, building, web</title><path d="M21.8,6.78,13.68,1.49a3.1,3.1,0,0,0-3.36,0L2.2,6.78A2.46,2.46,0,0,0,1,8.84V23h9V17.43h4V23h9V8.84A2.46,2.46,0,0,0,21.8,6.78ZM21,21H16V15.43H8V21H3V8.84a.49.49,0,0,1,.26-.39l8.12-5.29a1.14,1.14,0,0,1,1.18,0l8.12,5.29a.49.49,0,0,1,.26.39Z"/></svg> -->
     </div>
+
+    <div class="nav-content-mobile px-3">
+      <fa-icon icon="camera-retro" class="fa-2x"></fa-icon>
+      <router-link to="/" class="logo"><h1>Instagram</h1></router-link>
+      <img
+        :src="require('@/assets/img/message.svg')"
+        alt=""
+        class="icon"
+        width="35"
+        height="35"
+      />
+    </div>
   </nav>
 </template>
 
@@ -79,25 +91,12 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import { UserAccount } from '@/vendor/firebase/db/models'
-import { usernamesPath } from '@/vendor/firebase/db/refs'
 import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
 
 @Component({})
 export default class TopNav extends Vue {
   showProfileDropdown = false
   userProfileUrl = process.env.BASE_URL + '/user-profile-photo-placeholder.svg'
-
-  // @Watch('userProfileUrl')
-  // onChildChanged(val: string, oldVal: string) {
-  //   getUserProfilePhotoFromStorage()
-  //     .then((url) => {
-  //       this.userProfileUrl = url
-  //     })
-  //     .catch((error) => {
-  //       console.error(error)
-  //       // alert('Could not get user profile photo: ' + error.message)
-  //     })
-  // }
 
   get userAccount(): UserAccount {
     return this.$store.state.userAccount
@@ -152,6 +151,17 @@ export default class TopNav extends Vue {
   column-gap: 5rem;
   align-items: center;
 }
+
+.nav-content-mobile {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+
+  .icon {
+    font-size: 1rem;
+  }
+}
+
 .logo {
   color: #000;
   font-weight: normal;
@@ -259,6 +269,21 @@ export default class TopNav extends Vue {
     width: 15px;
     height: 15px;
     transform: rotateZ(45deg);
+  }
+}
+
+@media screen and (max-width: 974px) {
+  .nav-content {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .nav-content {
+    display: none;
+  }
+  .nav-content-mobile {
+    display: flex;
   }
 }
 </style>

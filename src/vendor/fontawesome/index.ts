@@ -19,7 +19,9 @@ import {
   faUserTag,
   faEllipsisH,
   faTimes,
-  faHeart as faHeartSolid
+  faHeart as faHeartSolid,
+  faCameraRetro,
+  faHome
 } from '@fortawesome/free-solid-svg-icons'
 
 //Regular
@@ -29,7 +31,8 @@ import {
   faComment,
   faHeart,
   faPaperPlane,
-  faSmile
+  faSmile,
+  faPlusSquare
 } from '@fortawesome/free-regular-svg-icons'
 
 library.add(
@@ -47,6 +50,10 @@ library.add(
   faEllipsisH,
   faTimes,
   faHeartSolid,
+  faCameraRetro,
+  faHome,
+  faPlusSquare,
+  
   // Regular
   faUser,
   faBookmark,
