@@ -48,10 +48,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
-import router from '@/router'
 import { UserAccount } from '@/vendor/firebase/db/models'
 import { NoticeOptions } from '@/components/Notice.vue'
-import { STORE_COMMITS } from '@/store/utils'
+import { isUserLoggedIn, STORE_COMMITS } from '@/store/utils'
 
 @Component
 export default class Login extends Vue {
@@ -85,6 +84,10 @@ export default class Login extends Vue {
 
   mounted() {
     this.$store.commit('toggleTopNav', false)
+
+    if (isUserLoggedIn(this)) {
+      this.$router.push('/')
+    }
   }
 
   firebaseEmailPasswordLogin(form: { email: string; password: string }) {
@@ -113,7 +116,7 @@ export default class Login extends Vue {
 
           // Artificial delay while we wait for the state to update
           setTimeout(() => {
-            router.push('/')
+            this.$router.push('/')
           }, 1000)
         }
       })

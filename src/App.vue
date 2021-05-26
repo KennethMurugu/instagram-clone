@@ -1,5 +1,10 @@
 <template>
   <div id="app">
+    <!-- <transition name="system-notice">
+      <Notice type="info" class="system-notice" :dismissable="true"
+        >System Notice</Notice
+      >
+    </transition> -->
     <TopNav v-if="$store.state.isTopNavShowing && isUserLoggedIn" />
     <router-view> </router-view>
 
@@ -19,7 +24,7 @@ import MobileNav from '@/components/MobileNav.vue'
 import { Component, Vue } from 'vue-property-decorator'
 import NewPost from '@/views/posts/NewPost.vue'
 import UserPostFullscreen from '@/views/posts/UserPostFullScreen.vue'
-import firebase from '@/vendor/firebase'
+
 import { UserAccount } from '@/vendor/firebase/db/models'
 import { isUserLoggedIn } from '@/store/utils'
 
@@ -35,65 +40,7 @@ export default class App extends Vue {
     return isUserLoggedIn(this)
   }
 
-  mounted() {
-    // Set callback for auth state changes
-    /*
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        console.log('The user is signed in; uid = ' + user.uid)
-
-        firebase
-          .database()
-          .ref(`accounts/${user?.uid}`)
-          .get()
-          .then((snapshot) => {
-            if (snapshot.exists()) {
-              const userAccount: UserAccount = snapshot.toJSON()!
-
-              this.$store.commit('setUserAccount', userAccount)
-              this.disableWatchForUserAccountChanges()
-              this.watchForUserAccountChanges()
-            }
-          })
-      } else {
-        console.log('No user is signed in')
-        this.disableWatchForUserAccountChanges()
-        this.$store.commit('setUserAccount', {})
-      }
-    })
-    */
-    // this.watchForUserAccountChanges()
-  }
-  /*
-  disableWatchForUserAccountChanges() {
-    firebase.database().ref(`accounts/${this.userAccount.uid}`).off('value')
-
-    console.log(
-      '[disableWatchForUserAccountChanges] Disabled callback on user account change...'
-    )
-  }
-  */
-  /*
-  watchForUserAccountChanges() {
-    const uid = this.$store.state.userAccount.uid
-    firebase
-      .database()
-      .ref(`accounts/${uid}`)
-      .on('value', (snapshot) => {
-        console.log(
-          '[watchForUserAccountChanges] Detected change on user account...'
-        )
-        if (snapshot.exists()) {
-          const userAccount = snapshot.toJSON()!
-          this.$store.commit('setUserAccount', userAccount)
-        } else {
-          console.error('[watchForUserAccountChanges] Snapshot is empty')
-        }
-      })
-
-    console.log('Watching for user account changes...')
-  }
-  */
+  mounted() {}
 }
 </script>
 
@@ -105,10 +52,28 @@ export default class App extends Vue {
     overflow: hidden;
   }
 }
+.system-notice {
+  position: absolute;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.164);
+  margin: 0 auto;
+  width: 50%;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, 0%);
+}
 
-@media screen and (max-width: 800px) {
-  .btn-upload-image {
-    display: none;
-  }
+.system-notice-enter,
+.system-notice-leave-to {
+  transform: translate(-50%, -200%);
+  opacity: 0;
+}
+.system-notice-enter-to,
+.system-notice-leave {
+  transform: translateY(-50%, 0%);
+  opacity: 1;
+}
+.system-notice-enter-active,
+.system-notice-leave-active {
+  transition: 0.2s ease;
 }
 </style>

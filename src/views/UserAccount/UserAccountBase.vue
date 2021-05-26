@@ -126,6 +126,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { UserAccount } from '@/vendor/firebase/db/models'
 import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
 import firebase from '@/vendor/firebase'
+import { isUserLoggedIn } from '@/store/utils'
 
 @Component({})
 export default class UserAccountBase extends Vue {
@@ -143,6 +144,9 @@ export default class UserAccountBase extends Vue {
 
   mounted() {
     this.$store.commit('toggleTopNav', true)
+    if (!isUserLoggedIn(this)) {
+      this.$router.push('/login')
+    }
 
     getUserProfilePhotoFromStorage()
       .then((url) => {

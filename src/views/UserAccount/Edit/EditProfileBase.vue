@@ -39,6 +39,7 @@
 </template>
 
 <script lang="ts">
+import { isUserLoggedIn } from '@/store/utils'
 import { UserAccount } from '@/vendor/firebase/db/models'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
@@ -48,6 +49,9 @@ export default class EditProfileBase extends Vue {
 
   mounted() {
     this.$store.commit('toggleTopNav', true)
+    if (!isUserLoggedIn(this)) {
+      this.$router.push('/login')
+    }
   }
 }
 </script>

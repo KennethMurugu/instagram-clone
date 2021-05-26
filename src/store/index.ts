@@ -5,10 +5,16 @@ import { STORE_COMMITS } from './utils'
 
 Vue.use(Vuex)
 
+const LOCAL_STORAGE_KEY_USER_ACCOUNT = 'instagram-clone-user-account'
+function getUserAccount() {
+  const acc = localStorage.getItem(LOCAL_STORAGE_KEY_USER_ACCOUNT)
+  return acc == null ? {} : JSON.parse(acc)
+}
+
 export default new Vuex.Store({
   state: {
     isTopNavShowing: false,
-    userAccount: {},
+    userAccount: getUserAccount(),
     showNewPostModal: false
   },
   mutations: {
@@ -23,8 +29,8 @@ export default new Vuex.Store({
       userAccount: UserAccount = {}
     ) {
       state.userAccount = userAccount
-      sessionStorage.setItem(
-        'instagram-clone-user-account',
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY_USER_ACCOUNT,
         JSON.stringify(userAccount)
       )
     }

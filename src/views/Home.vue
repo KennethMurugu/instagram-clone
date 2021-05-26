@@ -129,4 +129,10 @@ export default class Home extends Vue {
   // border: 1px solid mix(#000, $page-bg, 20%);
   cursor: pointer;
 }
+
+@media screen and (max-width: 800px) {
+  .btn-upload-image {
+    display: none;
+  }
+}
 </style>
