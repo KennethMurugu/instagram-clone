@@ -74,7 +74,11 @@
     </div>
 
     <div class="nav-content-mobile px-3">
-      <fa-icon icon="camera-retro" class="fa-2x"></fa-icon>
+      <fa-icon
+        icon="camera-retro"
+        class="fa-2x"
+        @click="$store.commit('toggleNewPostModal', true)"
+      ></fa-icon>
       <router-link to="/" class="logo"><h1>Instagram</h1></router-link>
       <img
         :src="require('@/assets/img/message.svg')"

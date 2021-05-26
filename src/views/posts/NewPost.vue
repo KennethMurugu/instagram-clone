@@ -47,6 +47,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import { Post, UserAccount } from '@/vendor/firebase/db/models'
+import { STORE_COMMITS } from '@/store/utils'
 
 @Component({})
 export default class NewPost extends Vue {
@@ -119,6 +120,7 @@ export default class NewPost extends Vue {
       })
       .then(() => {
         alert('Post created successfully')
+        this.$store.commit(STORE_COMMITS.TOGGLE_NEW_POST_MODAL, false)
       })
       .catch((error) => {
         alert(error.message)
