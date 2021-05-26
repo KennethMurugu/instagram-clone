@@ -1,3 +1,4 @@
+import { LOCAL_STORAGE_KEY_USER_ACCOUNT } from '@/store'
 import firebase from '@/vendor/firebase'
 import { UserAccount } from './models'
 
@@ -8,7 +9,7 @@ export function getUserProfilePhotoFromStorage(
   let userAccount: UserAccount
   if (forCurrentUser) {
     userAccount = JSON.parse(
-      sessionStorage.getItem('instagram-clone-user-account')!
+      localStorage.getItem(LOCAL_STORAGE_KEY_USER_ACCOUNT)!
     )
   } else {
     userAccount = anotherAccount

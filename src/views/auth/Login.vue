@@ -28,7 +28,10 @@
 
       <div class="auth-options">
         <div class="or mb-12">OR</div>
-        <button class="btn btn-login-facebook mx-auto mb-6">
+        <button
+          class="btn btn-login-facebook mx-auto mb-6"
+          @click.prevent="facebookLogin"
+        >
           <fa-icon :icon="['fab', 'facebook-square']" class="fb-icon"></fa-icon>
           Login with Facebook
         </button>
@@ -129,6 +132,45 @@ export default class Login extends Vue {
         this.loginNotice.msg = 'Something went wrong: ' + errorMessage
       })
       .finally(() => {
+        this.isWorking = false
+      })
+  }
+
+  facebookLogin() {
+    const provider = new firebase.auth.FacebookAuthProvider()
+    provider.addScope('public_profile')
+    provider.setCustomParameters({
+      display: '',
+    })
+
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then((result) => {
+        const user = result.user
+        // Fetch the user account from db so we can store it in state
+        return firebase.database().ref(`accounts/${user?.uid}`).get()
+      })
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          // Found the account, save in state
+          const userAccount: UserAccount = snapshot.toJSON()!
+
+          this.$store.commit(STORE_COMMITS.SET_USER_ACCOUNT, userAccount)
+
+          this.loginNotice.type = 'success'
+          this.loginNotice.msg = `Login successful as ${userAccount.email}`
+
+          // Artificial delay while we wait for the state to update
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 1000)
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+        this.loginNotice.type = 'error'
+        this.loginNotice.msg = 'Something went wrong: ' + error.message
         this.isWorking = false
       })
   }
