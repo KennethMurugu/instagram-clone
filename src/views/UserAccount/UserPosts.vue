@@ -7,10 +7,10 @@
       <img
         :src="require('@/assets/img/user-posts-empty.jpg')"
         alt="No user posts"
-        class="no-user-posts"
+        class="img-no-user-posts"
       />
 
-      <div class="no-posts-content">
+      <div class="no-posts-content pa-3">
         <h2 class="mb-3">Start capturing and sharing your moments.</h2>
         <p>Get the app to share your first photo or video.</p>
       </div>
@@ -92,8 +92,9 @@ export default class UserPosts extends Vue {
   grid-template-columns: 1fr 1fr;
   align-items: center;
 }
-.no-user-posts {
-  width: 380px;
+.img-no-user-posts {
+  width: 90%;
+  max-width: 380px;
 }
 .no-posts-content {
   text-align: center;
@@ -103,6 +104,17 @@ export default class UserPosts extends Vue {
   display: grid;
   grid-template-columns: repeat(3, 32%);
   gap: 2%;
+}
+
+@media screen and (max-width: 768px) {
+  .no-posts-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+  }
+  .img-no-user-posts {
+    margin: 1rem auto;
+  }
 }
 
 @media screen and (max-width: 700px) {

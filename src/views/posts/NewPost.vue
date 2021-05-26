@@ -140,11 +140,14 @@ export default class NewPost extends Vue {
   display: grid;
   place-items: center;
   z-index: 9999999;
+  padding: 1rem;
 }
 .modal-body {
   padding: 1rem 1.5rem;
   background-color: #fff;
-  width: 450px;
+  width: 100%;
+  max-width: 450px;
+
   max-height: 90vh;
   border-radius: 3px;
   overflow-y: auto;

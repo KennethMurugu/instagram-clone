@@ -88,4 +88,16 @@ export default class EditProfileBase extends Vue {
     }
   }
 }
+
+@media screen and (max-width: 768px) {
+  .edit-profile-base {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    margin: 0.25rem;
+  }
+
+  .account-items-container {
+    display: none;
+  }
+}
 </style>

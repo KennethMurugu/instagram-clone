@@ -173,12 +173,16 @@ export default class EditProfile extends Vue {
 
 .row {
   display: grid;
-  grid-template-columns: 170px 350px;
+  grid-template-columns: 170px auto;
   margin-bottom: 1.5rem;
   .section-left {
     text-align: right;
     margin-right: 3rem;
     padding-top: 0.65rem;
+  }
+
+  .section-right {
+    max-width: 350px;
   }
 }
 
@@ -192,5 +196,11 @@ export default class EditProfile extends Vue {
 
 textarea {
   resize: vertical;
+}
+
+@media screen and (max-width: 768px) {
+  .row {
+    grid-template-columns: 100px auto;
+  }
 }
 </style>
