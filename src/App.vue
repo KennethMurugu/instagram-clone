@@ -8,7 +8,7 @@
     <TopNav v-if="$store.state.isTopNavShowing && isUserLoggedIn" />
     <router-view> </router-view>
 
-    <MobileNav />
+    <MobileNav v-if="isUserLoggedIn" />
 
     <NewPost v-if="$store.state.showNewPostModal" />
 

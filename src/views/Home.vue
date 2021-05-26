@@ -103,6 +103,7 @@ export default class Home extends Vue {
 }
 .home {
   max-width: 614px;
+  min-height: calc(100vh - 54px - 54px);
 }
 
 .no-posts-msg {
