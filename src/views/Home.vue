@@ -24,6 +24,14 @@
         class="mb-6"
       />
     </template>
+
+    <div
+      class="btn-upload-image"
+      @click="$store.commit('toggleNewPostModal', true)"
+      v-if="isUserLoggedIn"
+    >
+      <fa-icon icon="camera-retro"></fa-icon>
+    </div>
   </div>
 </template>
 
@@ -103,6 +111,22 @@ export default class Home extends Vue {
 .link-make-new-post {
   color: $btn-bg;
   font-weight: bold;
+  cursor: pointer;
+}
+.btn-upload-image {
+  background-color: #fff;
+  width: 55px;
+  height: 55px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  border-radius: 50%;
+  color: #000;
+  font-size: 2rem;
+  display: grid;
+  place-items: center;
+  // border: 1px solid mix(#000, $page-bg, 20%);
   cursor: pointer;
 }
 </style>

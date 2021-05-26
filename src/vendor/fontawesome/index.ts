@@ -22,7 +22,10 @@ import {
   faHeart as faHeartSolid,
   faCameraRetro,
   faHome,
-  faChevronLeft
+  faChevronLeft,
+  faCheckCircle,
+  faExclamation,
+  faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons'
 
 //Regular
@@ -40,6 +43,7 @@ library.add(
   // Brands
   faFacebookSquare,
   faInstagram,
+
   // Solid
   faSpinner,
   faSearch,
@@ -55,6 +59,10 @@ library.add(
   faHome,
   faPlusSquare,
   faChevronLeft,
+  faCheckCircle,
+  faExclamation,
+  faExclamationTriangle,
+
   // Regular
   faUser,
   faBookmark,

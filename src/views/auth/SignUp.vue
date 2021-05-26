@@ -18,6 +18,9 @@
       </div>
 
       <div class="sign-up-form">
+        <Notice :type="signupNotice.type" v-if="signupNotice.msg">{{
+          signupNotice.msg
+        }}</Notice>
         <FormulateForm
           v-model="signUpForm"
           :schema="signUpFormSchema"
@@ -53,6 +56,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import { userAccountsPath, usernamesPath } from '@/vendor/firebase/db/refs'
+import { NoticeOptions } from '@/components/Notice.vue'
 
 // import { ui } from '@/vendor/firebase'
 
@@ -103,6 +107,10 @@ export default class SignUp extends Vue {
   ]
   signUpForm = {}
   isWorking = false
+  signupNotice: NoticeOptions = {
+    type: 'info',
+    msg: '',
+  }
 
   mounted() {
     this.$store.commit('toggleTopNav', false)
@@ -167,19 +175,15 @@ export default class SignUp extends Vue {
 
         return this.createUserAccountInDatabase(userSignupDetails)
       })
-      // .then(() => {
-      //   return this.addUserNameToDatabase(
-      //     userSignupDetails.uid,
-      //     userSignupDetails.user_name
-      //   )
-      // })
       .then(() => {
-        alert(`Signed up as ${form.email}`)
+        this.signupNotice.type = 'success'
+        this.signupNotice.msg = `Signup successful as ${form.email}`
         this.$router.push('/')
       })
       .catch((error) => {
         console.error(error)
-        alert('Something went wrong: ' + error.message)
+        this.signupNotice.type = 'error'
+        this.signupNotice.msg = 'Something went wrong: ' + error.message
       })
       .finally(() => {
         this.isWorking = false

@@ -2,13 +2,7 @@
   <div id="app">
     <TopNav v-if="$store.state.isTopNavShowing && isUserLoggedIn" />
     <router-view> </router-view>
-    <div
-      class="btn-upload-image"
-      @click="$store.commit('toggleNewPostModal', true)"
-      v-if="isUserLoggedIn"
-    >
-      <fa-icon icon="camera-retro"></fa-icon>
-    </div>
+
     <MobileNav />
 
     <NewPost v-if="$store.state.showNewPostModal" />
@@ -43,6 +37,7 @@ export default class App extends Vue {
 
   mounted() {
     // Set callback for auth state changes
+    /*
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         console.log('The user is signed in; uid = ' + user.uid)
@@ -66,10 +61,10 @@ export default class App extends Vue {
         this.$store.commit('setUserAccount', {})
       }
     })
-
+    */
     // this.watchForUserAccountChanges()
   }
-
+  /*
   disableWatchForUserAccountChanges() {
     firebase.database().ref(`accounts/${this.userAccount.uid}`).off('value')
 
@@ -77,7 +72,8 @@ export default class App extends Vue {
       '[disableWatchForUserAccountChanges] Disabled callback on user account change...'
     )
   }
-
+  */
+  /*
   watchForUserAccountChanges() {
     const uid = this.$store.state.userAccount.uid
     firebase
@@ -97,6 +93,7 @@ export default class App extends Vue {
 
     console.log('Watching for user account changes...')
   }
+  */
 }
 </script>
 
@@ -107,22 +104,6 @@ export default class App extends Vue {
   &.no-overflow {
     overflow: hidden;
   }
-}
-.btn-upload-image {
-  background-color: #fff;
-  width: 55px;
-  height: 55px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  border-radius: 50%;
-  color: #000;
-  font-size: 2rem;
-  display: grid;
-  place-items: center;
-  // border: 1px solid mix(#000, $page-bg, 20%);
-  cursor: pointer;
 }
 
 @media screen and (max-width: 800px) {

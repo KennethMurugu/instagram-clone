@@ -92,6 +92,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import { UserAccount } from '@/vendor/firebase/db/models'
 import { getUserProfilePhotoFromStorage } from '@/vendor/firebase/db/utils'
+import { STORE_COMMITS } from '@/store/utils'
 
 @Component({})
 export default class TopNav extends Vue {
@@ -120,7 +121,7 @@ export default class TopNav extends Vue {
       .then(() => {
         alert('Log out  successful!')
         // Clear session data
-        this.$store.commit('setUserAccount', {})
+        this.$store.commit(STORE_COMMITS.SET_USER_ACCOUNT, {})
         this.$router.push('/login')
       })
       .catch((error) => {

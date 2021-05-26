@@ -6,6 +6,9 @@
       </div>
 
       <div class="sign-up-form mb-12">
+        <Notice :type="loginNotice.type" v-if="loginNotice.msg">{{
+          loginNotice.msg
+        }}</Notice>
         <FormulateForm
           v-model="loginForm"
           :schema="loginFormSchema"
@@ -47,6 +50,8 @@ import { Component, Vue } from 'vue-property-decorator'
 import firebase from '@/vendor/firebase'
 import router from '@/router'
 import { UserAccount } from '@/vendor/firebase/db/models'
+import { NoticeOptions } from '@/components/Notice.vue'
+import { STORE_COMMITS } from '@/store/utils'
 
 @Component
 export default class Login extends Vue {
@@ -73,6 +78,10 @@ export default class Login extends Vue {
   ]
   loginForm = {}
   isWorking = false
+  loginNotice: NoticeOptions = {
+    type: 'info',
+    msg: '',
+  }
 
   mounted() {
     this.$store.commit('toggleTopNav', false)
@@ -82,18 +91,39 @@ export default class Login extends Vue {
     console.log(form)
 
     this.isWorking = true
+    this.loginNotice.msg = ''
     firebase
       .auth()
       .signInWithEmailAndPassword(form.email, form.password)
       .then((userCredentials) => {
-        alert(`Login successful as ${userCredentials.user?.email}`)
-        router.push('/')
+        // Fetch the user account from db so we can store it in state
+        return firebase
+          .database()
+          .ref(`accounts/${userCredentials.user?.uid}`)
+          .get()
+      })
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const userAccount: UserAccount = snapshot.toJSON()!
+
+          this.$store.commit(STORE_COMMITS.SET_USER_ACCOUNT, userAccount)
+
+          this.loginNotice.type = 'success'
+          this.loginNotice.msg = `Login successful as ${userAccount.email}`
+
+          // Artificial delay while we wait for the state to update
+          setTimeout(() => {
+            router.push('/')
+          }, 1000)
+        }
       })
       .catch((error) => {
         var errorCode = error.code
         var errorMessage = error.message
         console.error(error)
-        alert('Something went wrong: ' + errorMessage)
+        // alert('Something went wrong: ' + errorMessage)
+        this.loginNotice.type = 'error'
+        this.loginNotice.msg = 'Something went wrong: ' + errorMessage
       })
       .finally(() => {
         this.isWorking = false
